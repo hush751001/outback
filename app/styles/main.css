@@ -1,0 +1,134 @@
+
+.ui-mobile [data-role=page],.ui-page{
+	position: absolute; display: -webkit-box; -webkit-box-orient: vertical; top: 0; bottom: 0; left: 0; right: 0; border: 0; overflow: hidden;
+}
+
+.ui-mobile .ui-page-active {
+	display: block; overflow: visible; overflow-x: hidden;
+}
+
+/* Fouc */
+.ui-mobile-rendering>* {
+	visibility: hidden;
+}
+
+/* Non-js content hiding */
+.ui-nojs {
+	position: absolute !important; height: 1px; width: 1px; overflow: hidden; clip: rect(1px, 1px, 1px, 1px);
+}
+
+/* Loading screen */
+
+/* ui-loading */
+.ui-loading {
+	pointer-events: none;
+}
+
+.ui-loading .ui-loader {
+	display: block;
+}
+
+.ui-loader {
+	display: none; z-index: 9999999; position: fixed; top: 50%; left: 50%; border: 0;
+}
+
+.ui-loader-bg {
+	position: fixed; z-index: 9999998; opacity: 0.4; background-color: #000; right: 0; bottom: 0; top: 0; left: 0;
+}
+
+.ui-loader-default {
+	background: none; width: 50px; height: 50px; margin-left: -25px; margin-top: -25px;
+}
+
+.ui-loader-verbose {
+	width: 12.5em; filter: Alpha(Opacity = 88); opacity: .88; box-shadow: 0 1px 1px -1px #fff; height: auto; margin-left: -6.875em; margin-top: -2.6875em;
+	padding: .625em;
+}
+
+.ui-loader-default h1 {
+	font-size: 0; width: 0; height: 0; overflow: hidden;
+}
+
+.ui-loader-verbose h1 {
+	font-size: 1em; margin: 0; text-align: center;
+}
+
+.ui-loader .ui-icon-loading {
+	display: block; position:relative; margin: 0; width: 50px; height: 50px;
+}
+
+.ui-loader-verbose .ui-icon-loading {
+	margin: 0 auto .625em; filter: Alpha(Opacity = 75); opacity: .75;
+}
+
+.ui-loader-textonly {
+	padding: .9375em; margin-left: -7.1875em;
+}
+
+.ui-loader-textonly .ui-icon-loading {
+	display: none;
+}
+
+.ui-loader-fakefix {
+	position: absolute;
+}
+
+/* Used for hiding elements by the filterable widget. You can also use this class to hide list items or buttons in controlgroups; this ensures correct corner styling. */
+.ui-screen-hidden {
+	display: none !important;
+}
+
+[data-role='popup'] {
+	display: none;
+}
+
+.ui-popup {
+	overflow: hidden; position: absolute; background-color: #fff; top:50%;
+}
+
+.ui-popup-bg {
+	position: absolute; background-color: #000; right: 0; bottom: 0; top: 0; left: 0;
+}
+
+.ui-popup.ui-popup-active {
+	display: -webkit-box;
+}
+
+/* Loader */
+.ui-icon-loading {
+	background: url("../images/loading.gif"); background-size: cover; background-position: 0px 0px; background-repeat: no-repeat;
+}
+
+/* Swatches */
+/* A
+-----------------------------------------------------------------------------------------------------------*/
+
+/* Page and overlay */
+.ui-overlay-a,.ui-page-theme-a,.ui-page-theme-a .ui-panel-wrapper {
+	background-color: rgb(87, 167, 202); border-color: #bbb /*{a-page-border}*/; color: #333 /*{a-page-color}*/;
+}
+
+/* Body: Read-only lists, text inputs, collapsible content */
+.ui-body-a,.ui-page-theme-a .ui-body-inherit,html .ui-bar-a .ui-body-inherit,html .ui-body-a .ui-body-inherit,html body .ui-group-theme-a .ui-body-inherit,html .ui-panel-page-container-a
+	{
+	background-color: #fff /*{a-body-background-color}*/; border-color: #ddd /*{a-body-border}*/; color: #333 /*{a-body-color}*/;
+	text-shadow: 0 /*{a-body-shadow-x}*/ 1px /*{a-body-shadow-y}*/ 0 /*{a-body-shadow-radius}*/  	 #f3f3f3 /*{a-body-shadow-color}*/;
+}
+
+.ui-body-a {
+	border-width: 1px; border-style: solid;
+}
+
+/* Focus */
+.ui-page-theme-a .ui-btn:focus,html .ui-bar-a .ui-btn:focus,html .ui-body-a .ui-btn:focus,html body .ui-group-theme-a .ui-btn:focus,html head+body .ui-btn.ui-btn-a:focus,
+	/* Focus buttons and text inputs with div wrap */ .ui-page-theme-a .ui-focus,html .ui-bar-a .ui-focus,html .ui-body-a .ui-focus,html body .ui-group-theme-a .ui-focus,html head+body .ui-btn-a.ui-focus,html head+body .ui-body-a.ui-focus
+	{
+	-webkit-box-shadow: none !important; -moz-box-shadow: none !important; box-shadow: none !important;
+}
+
+.ui-content {
+	top: 0; bottom: 0;
+}
+
+.ui-page-theme-a .ui-btn:focus {-webkit-box-shadow:none; box-shadow:none}
+.ui-header, .ui-footer {background-color: transparent;}
