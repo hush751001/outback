@@ -3346,7 +3346,7 @@
     //
     var sendDataCount = 0;
 
-    // base for morpheus
+    // base for xwalk
     $.extend( $.outback, {
       initializePage: function() {
         if($("[data-role='page']").page) {
@@ -3359,127 +3359,29 @@
           hideRenderingClass();
         }
       },
-      getDeviceInfo: function() {
-        return WNGetDeviceInfo();
-      },
-      requestDatePicker: function(obj, callback) {
-        var funcName = "CB_RDP";
-        window[funcName] = callback;
-
-        if (wnIf.device == DT_IOS) {
-          ExDatePicker(funcName, obj.initDate, obj.lowDate, obj.maxDate);
-        }
-        else {
-          WNRequestDatePicker(funcName, obj.type, obj.initDate, obj.lowDate, obj.maxDate);
-        }
-      },
-      exitProgram: function() {
-        WNExitProgram();
-      },
-      moveToHtmlPage: function(obj) {
-        var param = new Parameter();
-        for(var p in obj.param) {
-          param.putParameter(p, obj.param[p]);
-        }
-        WNMoveToHtmlPage(obj.url, obj.param ? param.toParamString() : "", obj.actionType || "NEW_SCR", obj.animationType || "DEFAULT", obj.orientation || "DEFAULT");
-      },
-      moveToNativePage: function(obj) {
-        // encodeURI가 내부적으로 되게 됨. 이렇게 사용해야 모든 문자를 넘길 수 있음.
-        /*
-         var param = new Parameter();
-         for(var p in obj.param) {
-         param.putParameter(p, obj.param[p]);
-         }
-         WNMoveToNativePage(obj.className, obj.param ? param.toParamString() : "", obj.actionType || "NEW_SCR", obj.animationType || "DEFAULT", obj.orientation || "DEFAULT");
-         */
-
-        // TODO: encode를 하지 않도록 수정하여 파라미터를 넘긴다. 만약 특수문자가 있다면 넘기지 못할 수도 있다.
-        // 나중에는 Native코드와 함께 수정해야함.
-        WNMoveToNativePage(obj.className, obj.param ? $.param(obj.param) : "", obj.actionType || "NEW_SCR", obj.animationType || "DEFAULT", obj.orientation || "DEFAULT");
-      },
       historyBack: function(obj) {
-        obj = obj || {};
-        var param = new Parameter();
-        for(var p in obj.param) {
-          param.putParameter(p, obj.param[p]);
-        }
-        WNHistoryBack(obj.param ? param.toParamString() : "", obj.animationType || "SLIDE_RIGHT");
+        //
       },
-      httpSendData: function(obj, callback) {
+      post: function(obj, callback) {
         var hideLoading = obj.hideLoading;
         if(!hideLoading) {
           $.outback.loading('show');
         }
-        var funcName = "CB_HSD" + sendDataCount++;
-        window[funcName] = function(trCode, receivedData) {
-          var args = Array.prototype.slice.call(arguments, 0);
-          callback.apply(this, args);
+
+        $.ajax({
+
+        })
+        .always(function() {
           if(!hideLoading) {
             $.outback.loading('hide');
           }
-        };
-
-        WNHttpSendData(
-          obj.targetServerName || "HTTP_MORPHEUS",
-          obj.trCode || "",
-          funcName,
-          obj.reqJSONData || {},
-          obj.reqNetOptions || commReqNetOptions,
-          obj.tagId);
-      },
-      setVariable: function(name, value) {
-        WNSetVariable(name, value);
-      },
-      getVariable: function(name) {
-        return WNGetVariable(name);
-      },
-      setVariableToStorage: function(name, value) {
-        WNSetVariableToStorage(name, value);
-      },
-      getVariableFromStorage: function(name) {
-        return WNGetVariableFromStorage(name);
-      },
-      moveToOpenOtherApp: function(scheme) {
-        WNMoveToOpenOtherApp(scheme);
-      },
-      moveToOpenAppStore: function(scheme) {
-        WNMoveToOpenAppStore(scheme);
-      },
-      checkAppInstalled: function(scheme) {
-        return WNCheckAppInstalled(scheme);
-      },
-      openWebBrowser: function(url) {
-        WNOpenWebBrowser(url);
-      },
-      makeCall: function(phoneNo) {
-        phoneNo = phoneNo.replace(/[^\d]/g, "");
-        WNMakeCall(phoneNo);
-      },
-      updateResourceFiles: function(serverName) {
-        WNUpdateResourceFiles(serverName);
+        });
       },
       log: function(tag, message, level) {
-        WNLog(tag, message, level);
-      }
-    });
-
-    var oldHistoryBack = $.outback.historyBack;
-    // base for extend
-    $.extend( $.outback, {
+        console.log(message);
+      },
       getCurrentPageInstance: function() {
         return $("[data-role=page]").page("instance");
-      },
-      historyBack: function(obj) {
-        var curPage = $.outback.getCurrentPageInstance();
-        if(curPage.options.pageAnimation && !curPage.oldAndroid) {
-          $(".ui-post, .ui-sticky-wrapper").addClass("animated fadeOutDownBig");
-          $(".ui-post").eq(0).animationComplete(function() {
-            oldHistoryBack(obj);
-          });
-        }
-        else {
-          oldHistoryBack(obj);
-        }
       }
     });
 
@@ -3689,69 +3591,6 @@
           $el.removeClass('ui-popup-active');
           _close();
         }
-      }
-    });
-  })( jQuery );
-
-  /**
-   * ajax setting
-   */
-  (function($) {
-
-    // $.ajax 공통처리
-    $(document).on('ajaxStart', function(e) {
-      $.outback.loading('show');
-    }).on('ajaxStop', function(e) {
-      $.outback.loading('hide');
-    });
-
-    function isDataTypeJson(dataTypes) {
-        var index = _.findIndex(dataTypes, function(item) {
-            return (item == 'json');
-        });
-        return (index != -1);
-    }
-
-    $.ajaxSetup({
-      headers : {"cache-control": "no_cache"},
-      type: 'POST',
-      contentType : 'application/x-www-form-urlencoded;charset=UTF-8',
-      beforeSend: function(jqXHR, s) {
-        jqXHR.done(function(res) {
-          // dataType이 json일때만 확인한다.
-          if(isDataTypeJson(this.dataTypes)) {
-            res = res[0];
-            if(res && res.sessionExpiredYn == 'Y') {
-              // 세션이 종료되어 ajax 에러가 발생한 상태이므로, 다음 success() 또는 done()을 실행하지 않게 한다.
-              // 네이티브 초기화면으로 이동한다.
-              // expireLoginSession();
-              return false;
-            }
-          }
-        });
-
-        // ajax호출시 BizException 발생하여 화면이 내려오는 경우를 처리하기 위함.
-        jqXHR.fail(function(xhr, ajaxOptions, thrownError) {
-          // dataType이 json일때만 확인한다.
-          if(isDataTypeJson(this.dataTypes)) {
-            if(ajaxOptions == 'parsererror') {
-              try {
-                var $doc = $(xhr.responseText);
-                var isLoginException = $doc.closest('form').find('#isLoginException').val();
-                if(isLoginException == 'true') {
-                  location.href = '/';  // 로그인 페이지로 이동
-                  return false;
-                }
-              } catch(e) {
-              }
-            }
-          }
-        });
-      },
-      error: function(xhr, ajaxOptions, thrownError) {
-        // $.outback.alert({
-        //   message: '시스템 장애가 발생했습니다. 잠시후에 다시 시도해 주십시오.'
-        // });
       }
     });
   })( jQuery );

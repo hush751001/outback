@@ -8,7 +8,6 @@
 - lodash 사용
 - jQuery Mobile의 Page 기반
 - SPA 확장 가능할까?
-- WebView history를 사용하지 않고, History API 만들자
 - 화면처리
     - server-side rendering : JSTL, EL 사용하여 성능 향상
     - Ajax로 받아오는 데이터 : ejs 사용

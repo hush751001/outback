@@ -1,7 +1,7 @@
 
 (function( $ ) {
 
-$.widget("outback.page", $.outback.basePage, {
+$.widget('outback.page', $.outback.basePage, {
   _create: function() {
     // MUST : basePage의 _create()를 호출한다.
     this._super();
@@ -40,19 +40,19 @@ $.widget("outback.page", $.outback.basePage, {
           var text = $(e.target).text();
           $.outback.popupClose('#popupTelecom');
           
-          if(text === "SKT" || text === "SK알뜰폰") {
+          if(text === 'SKT' || text === 'SK알뜰폰') {
             $.outback.moveToExWeb({
               url: mobileWebDomain + 'appcardapp/terms/HL022_2.html',
               pageCode: pageCode
             });
           }
-          else if(text === "KT" || text === "KT알뜰폰") {
+          else if(text === 'KT' || text === 'KT알뜰폰') {
             $.outback.moveToExWeb({
               url: mobileWebDomain + 'appcardapp/terms/HL022_1.html',
               pageCode: pageCode
             });
           }
-          else if(text === "LG U+" || text === "LG알뜰폰") {
+          else if(text === 'LG U+' || text === 'LG알뜰폰') {
             $.outback.moveToExWeb({
               url: mobileWebDomain + 'appcardapp/terms/HL022_3.html',
               pageCode: pageCode
