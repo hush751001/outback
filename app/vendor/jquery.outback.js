@@ -3061,11 +3061,6 @@
         }
 
         window.onInitPage = function() {
-          // 터치동작을 하면 10분 타이머를 리셋해서 Session이 끊기지 않도록 한다.
-          document.addEventListener('touchstart', function(e) {
-            ExResetTimer();
-          }, true);
-
           self.onInitPage.call(self);
 
           // page가 보이게 한다.
@@ -3087,13 +3082,6 @@
         // CHECK: onInitPage과 함께 onResume이 올 경우가 있을 수도 있으니 확인해봐야 함.
         window.onResume = $.proxy(this.onResume, this);
         window.onPause = $.proxy(this.onPause, this);
-        window.onRestorePage = $.proxy(this.onRestorePage, this);
-        window.onDestroyPage = $.proxy(this.onDestroyPage, this);
-        window.onHandlingNetworkError = function() {
-          var args = Array.prototype.slice.call(arguments, 0);
-          $.outback.loading('hide', true);
-          self.onHandlingNetworkError.apply(self, args);
-        };
 
         if ( !this.options.enhanced ) {
           this._enhance();
@@ -3136,26 +3124,14 @@
       onInitPage: function() {
 
       },
-      onHidePage: function() {
-
-      },
       onResume: function() {
 
       },
       onPause: function() {
 
       },
-      onRestorePage: function() {
-
-      },
-      onDestroyPage: function() {
-
-      },
       onHistoryBackPage: function() {
         $.outback.historyBack();
-      },
-      onHandlingNetworkError: function(callerServerName, trCode, errCode, errMessage, tagId) {
-
       }
     });
 
@@ -3355,21 +3331,27 @@
             hideRenderingClass();
           }
         }
-        else {
-          hideRenderingClass();
-        }
       },
       historyBack: function(obj) {
-        //
+        if(xWalk) {
+          xWalk.historyBack();
+        }
+        else {
+          history.back();
+        }
       },
-      post: function(obj, callback) {
+      post: function(obj) {
         var hideLoading = obj.hideLoading;
         if(!hideLoading) {
           $.outback.loading('show');
         }
 
-        $.ajax({
-
+        return $.ajax({
+          url : obj.url,
+          data : obj.data
+        })
+        .fail(function() {
+          $.outback.loading('hide', true);
         })
         .always(function() {
           if(!hideLoading) {
@@ -3440,7 +3422,7 @@
         opened: null,
         closed: null,
         inAnimation: 'fadeIn',
-        outAnimation: 'fadeOut',
+        outAnimation: 'fadeOut fast',
         vcenter: true,
         hcenter: true
       },
@@ -3494,7 +3476,7 @@
           },
           'vclick': function(e) {
             // 팝업 상위로 버블링되는 event를 막기위함. 단말에서 깜빡임의 원인이 됨.
-            return false;
+            e.stopPropagation();
           }
         });
 

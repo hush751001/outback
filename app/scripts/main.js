@@ -12,14 +12,14 @@ $.widget('outback.page', $.outback.basePage, {
     // deviceready 때
   },
   onHistoryBackPage: function() {
-    $.outback.confirm({
-      message: '진행 중인 결제를 중단합니다.\n중단하시려면 [확인]버튼을 누르세요.',
-      buttonTitle: '확인'
-    }, function(result) {
-      if(result === 'YES') {
+    // $.outback.confirm({
+    //   message: '진행 중인 결제를 중단합니다.\n중단하시려면 [확인]버튼을 누르세요.',
+    //   buttonTitle: '확인'
+    // }, function(result) {
+    //   if(result === 'YES') {
         $.outback.historyBack();
-      }
-    });
+    //   }
+    // });
   },
   /**
    * 화면 이벤트 설정
