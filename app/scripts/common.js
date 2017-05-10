@@ -18,7 +18,7 @@ $.widget('outback.basePage', $.outback.basePage, {
   },
   _create: function() {
     $.outback.loading('show');
-    $('body').append('<link rel="stylesheet" href="../styles/animate.css">');
+    $('body').append('<link rel="stylesheet" href="/styles/animate.css">');
 
     var o = this.options;
     // MUST : basePage의 _create()를 호출한다.
