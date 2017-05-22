@@ -45,6 +45,7 @@
     "bootstrap": "^3.3.7",
     "ejs": "^2.5.6",
     "jquery-form-validator": "^2.3.64",
+    "jquery-markview": "^0.0.4",
     "swiper": "^3.4.2"
   }
 }
