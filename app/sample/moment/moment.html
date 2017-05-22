@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>popup</title>
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.css">
+    <script src="/vendor/jquery.js"></script>
+    <script src="/vendor/lodash.min.js"></script>
+    <script src="/vendor/moment.js"></script>
+    <script src="/vendor/numeral.js"></script>
+    <script src="/vendor/jquery.outback.js"></script>
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.js"></script>
+    <style>
+      .btn {
+        vertical-align: inherit;
+      }
+      .btn-block {
+        display: inline;
+        width: 49%;
+      }
+      .form-control {
+
+      }
+    </style>
+  </head>
+  <body>
+    <div data-role="page">
+      <div class="container">
+        <form class="form-signin">
+          <h2 class="form-signin-heading">Moment Sample</h2>
+
+          <label class="control-label" for="inputDate">Date</label>
+          <input type="date" id="inputDate" class="form-control" placeholder="Enter date to change format." required autofocus><br />
+          <label class="control-label" for="inputFormat">Format</label>
+          <input type="text" id="inputFormat" class="form-control" placeholder="Enter format to change number." required autofocus><br />
+          <label class="control-label" for="inputResult">Result</label>
+          <input type="text" id="inputResult" class="form-control" placeholder="Result" required disabled><br />
+        
+          <button id="btnReset" class="btn btn-lg btn-primary btn-block" type="reset">Reset</button>
+          <button id="btnChange" class="btn btn-lg btn-primary btn-block" type="button">Change</button>
+        </form>
+      </div> <!-- /container -->
+    
+    </div>
+    
+    <script src="/scripts/common.js"></script>
+    <script>
+
+(function( $ ) {
+
+$.widget('outback.page', $.outback.basePage, {
+  _create: function() {
+    // MUST : basePage의 _create()를 호출한다.
+    this._super();
+    
+    this.setEvent();
+  },
+  onInitPage: function() {
+    // deviceready 때
+  },
+  onHistoryBackPage: function() {
+    $.outback.historyBack();
+  },
+  /**
+   * 화면 이벤트 설정
+   */
+  setEvent: function() {
+    this._on({
+      'vclick #btnReset': 'onBtnResetClicked',
+      'vclick #btnChange': 'onBtnChangeClicked'
+    });
+
+    $.outback.loading('hide');
+  },
+  onPopupButtonClick: function(e) {
+    var text = $(e.target).text();
+    $.outback.popupClose('#popupTelecom');
+    
+    console.log(text + " selected.");
+    return false;
+  },
+  onPopupBeforeOpened: function(e) {
+    $(e.target).on('vclick', 'button', $.proxy(this.onPopupButtonClick, this));
+  },
+  onPopupClosed: function(e) {
+    $(e.target).off('vclick', 'button');
+  },
+  onBtnResetClicked: function(e) {
+    console.log("onBtnResetClicked");
+  },
+  onBtnChangeClicked: function(e) {
+    var date = $('#inputDate').val();
+    var format = $('#inputFormat').val();
+    $('#inputResult').val( moment( date ).format( format ) );
+  }
+});
+
+})( jQuery );
+    </script>
+  </body>
+</html>
