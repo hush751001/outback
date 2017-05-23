@@ -12,6 +12,7 @@
     <script src="/vendor/lodash.min.js"></script>
     <script src="/vendor/jquery.outback.js"></script>
     <script src="/vendor/jquery-form-validator/form-validator/jquery.form-validator.js"></script>
+    <script src="/vendor/jquery.mask.min.js"></script>
     <script src="/scripts/common.js"></script>
     
     <!-- markdown -->
@@ -32,19 +33,19 @@
         <form id="frmTest1" action="/">
           <div class="form-group">
             <label class="control-label" for="name">이름</label>
-            <input type="text" id="name" class="form-control" data-validation="required" data-validation-error-msg="이름을 입력하세요." />
+            <input type="text" name="name" id="name" class="form-control" data-validation="required" data-validation-error-msg="이름을 입력하세요." />
           </div>
 
           <div class="form-group">
             <label class="control-label" for="email">email</label>
-            <input type="text" id="email" class="form-control" data-validation="email" />
+            <input type="text" name="email" id="email" class="form-control" data-validation="email" />
           </div>
 
           <div class="form-group">
             <label class="control-label" for="phone1">휴대전화번호</label>
             <div class="row">
               <div class="col-md-3">
-                <select class="form-control" id="phone1" data-validation-depends-on="phone23" data-validation="required" data-validation-error-msg="통신사를 선택하세요.">
+                <select class="form-control" name="phone1" id="phone1" data-validation-depends-on="phone23" data-validation="required" data-validation-error-msg="통신사를 선택하세요.">
                   <option value=""> - - 통신사 - - </option>
                   <option>010</option>
                   <option>016</option>
@@ -54,12 +55,12 @@
                 </select>
               </div>
               <div class="col-md-9">
-                <input type="text" id="phone23" data-validation-depends-on="phone1" class="form-control" data-validation="length" data-validation-length="7-8" />
+                <input type="text" name="phone23" id="phone23" data-mask="00000009" data-validation-depends-on="phone1" class="form-control" data-validation="length" data-validation-length="7-8" />
               </div>
             </div>
           </div>
 
-          <button id="btnOK" class="btn btn-default">확인</button>
+          <button type="submit" id="btnOK" class="btn btn-default">확인</button>
         </form>
       </div>
       <div id="markview"></div>
@@ -73,6 +74,9 @@ $(function() {
       style: 'fold',
       loadData: function() { return $.get('./validator.md') }
   });
+
+  // data-mask 처리
+  $.applyDataMask();
 });
 
   $.widget('outback.page', $.outback.basePage, {
@@ -101,6 +105,11 @@ $(function() {
       if($('#frmTest1').isValid()) {
         alert("성공 - submit해야함.");
       }
+      else {
+        // 에러가 발생한 첫번째 :input으로 포커스를 보낸다.
+        $('#frmTest1 .form-control.error').eq(0).focus();
+      }
+
       return false;
     }
   });
