@@ -5,12 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>outback</title>
     <link rel="stylesheet" href="/styles/main.css">
-    <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.css">
+    <!-- vendor.js : start -->
     <script src="/vendor/jquery.js"></script>
     <script src="/vendor/bootstrap/js/bootstrap.js"></script>
     <script src="/vendor/lodash.min.js"></script>
+    <script src="/vendor/moment.js"></script>
+    <script src="/vendor/numeral.js"></script>
     <script src="/vendor/jquery.outback.js"></script>
-    <script src="/scripts/common.js"></script>
+    <!-- vendor.js : end -->
   </head>
   <body>
     <div data-role="page">
@@ -20,24 +22,11 @@
         <li><a href="/sample/numeral/numeral.html">numeral</a></li>
         <li><a href="/sample/moment/moment.html">moment</a></li>
         <li><a href="/sample/validator/validator.html">validator</a></li>
+        <li><a href="/sample/naver/maps.html">naver maps</a></li>
       </ul>
     </div>
 
-    <script>
-    
-(function( $ ) {
-
-$.widget('outback.page', $.outback.basePage, {
-  _create: function() {
-    // MUST : basePage의 _create()를 호출한다.
-    this._super();
-    
-    $.outback.loading('hide');
-  }
-});
-
-})( jQuery );
-
-    </script>
+    <script src="/scripts/common.js"></script>
+    <script src="/scripts/main.js"></script>
   </body>
 </html>
