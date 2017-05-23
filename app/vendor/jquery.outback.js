@@ -3387,8 +3387,18 @@
         else {
           $popup.popup("option", options);
         }
-
-        $popup.popup('open');
+        /* url이 있을 경우 외부에서 html을 popup content에 삽입한다. */
+        if(options.url) {
+          $.get({
+            url : options.url,
+            data : options.data
+          }).done(function(text) {
+            $popup.find('.ui-popup-content').html(text);
+          });
+        }
+        else {
+          $popup.popup('open');
+        }
       }
     };
 
@@ -3424,7 +3434,9 @@
         inAnimation: 'fadeIn',
         outAnimation: 'fadeOut fast',
         vcenter: true,
-        hcenter: true
+        hcenter: true,
+        url: '',
+        data: ''
       },
 
       _create: function() {

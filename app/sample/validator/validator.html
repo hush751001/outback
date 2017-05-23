@@ -5,20 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Vaildator</title>
     <link rel="stylesheet" href="/styles/main.css">
-    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.css">
-    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap-theme.css">
-    <link rel="stylesheet" href="/node_modules/jquery-form-validator/src/theme-default.css">
+    <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="/vendor/jquery-form-validator/form-validator/theme-default.css">
     <script src="/vendor/jquery.js"></script>
-    <script src="/node_modules/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="/vendor/bootstrap/js/bootstrap.js"></script>
     <script src="/vendor/lodash.min.js"></script>
     <script src="/vendor/jquery.outback.js"></script>
-    <script src="/node_modules/jquery-form-validator/form-validator/jquery.form-validator.js"></script>
-
+    <script src="/vendor/jquery-form-validator/form-validator/jquery.form-validator.js"></script>
+    <script src="/scripts/common.js"></script>
+    
     <!-- markdown -->
-    <link rel="stylesheet" href="/node_modules/jquery-markview/dist/jquery-markview.css">
-    <script src="/node_modules/d3/build/d3.js"></script>
-    <script src="/node_modules/marked/lib/marked.js"></script>
-    <script src="/node_modules/jquery-markview/dist/jquery-markview.js"></script>
+    <link rel="stylesheet" href="/markdown/jquery-markview.css">
+    <script src="/markdown/d3.js"></script>
+    <script src="/markdown/marked.js"></script>
+    <script src="/markdown/jquery-markview.js"></script>
     <style>
       #markview {
         margin-top: 30px;
@@ -64,8 +64,6 @@
       </div>
       <div id="markview"></div>
     </div>
-    <script src="/scripts/common.js"></script>
-
 <script>
 
 (function( $ ) {
@@ -94,7 +92,7 @@ $(function() {
      */
     setEvent: function() {
       this._on({
-        'vclick #btnOK': 'onBtnOK_Click'
+        'click #btnOK': 'onBtnOK_Click'
       });
 
       $.outback.loading('hide');
