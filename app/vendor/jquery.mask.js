@@ -538,3 +538,4 @@
         }
     }, globals.watchInterval);
 }, window.jQuery, window.Zepto));
+
