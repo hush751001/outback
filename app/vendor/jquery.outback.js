@@ -3347,6 +3347,7 @@
         }
 
         return $.ajax({
+          method : 'post',
           url : obj.url,
           data : obj.data
         })
