@@ -58,4 +58,35 @@ $.widget('outback.popup', $.outback.popup, {
   }
 });
 
+/**
+ * 문자 입력 필터
+ */
+
+// 숫자만
+$(document).on('input', 'input.ob-input-number', function(e) {
+  var re = /[^0-9]/g;
+  if(re.test(e.target.value)) {
+    e.target.value = e.target.value.replace(re, '');
+    return false;
+  }
+});
+
+// 이메일
+$(document).on('input', 'input.ob-input-email', function(e) {
+  var re = /[^0-9a-zA-Z@\-_\.]/g;
+  if(re.test(e.target.value)) {
+    e.target.value = e.target.value.replace(re, '');
+    return false;
+  }
+});
+
+// 숫자/영문/한글
+$(document).on('input', 'input.ob-input-uid', function(e) {
+  var re = /[^0-9a-zA-Z^가-힣ㄱ-ㅎㅏ-ㅣ]/g;
+  if(re.test(e.target.value)) {
+    e.target.value = e.target.value.replace(re, '');
+    return false;
+  }
+});
+
 })( jQuery );

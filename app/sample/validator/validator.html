@@ -12,7 +12,6 @@
     <script src="/vendor/lodash.min.js"></script>
     <script src="/vendor/jquery.outback.js"></script>
     <script src="/vendor/jquery-form-validator/form-validator/jquery.form-validator.js"></script>
-    <script src="/vendor/jquery.mask.min.js"></script>
     <script src="/scripts/common.js"></script>
     
     <!-- markdown -->
@@ -33,12 +32,12 @@
         <form id="frmTest1" action="/">
           <div class="form-group">
             <label class="control-label" for="name">이름</label>
-            <input type="text" name="name" id="name" class="form-control" data-validation="required" data-validation-error-msg="이름을 입력하세요." />
+            <input type="text" name="name" id="name" class="form-control ob-input-uid" data-validation="required" data-validation-error-msg="이름을 입력하세요." />
           </div>
 
           <div class="form-group">
             <label class="control-label" for="email">email</label>
-            <input type="text" name="email" id="email" class="form-control" data-validation="email" />
+            <input type="text" name="email" id="email" class="form-control ob-input-email" data-validation="email" />
           </div>
 
           <div class="form-group">
@@ -55,7 +54,7 @@
                 </select>
               </div>
               <div class="col-md-9">
-                <input type="text" name="phone23" id="phone23" data-mask="00000009" data-validation-depends-on="phone1" class="form-control" data-validation="length" data-validation-length="7-8" />
+                <input type="text" name="phone23" id="phone23" data-validation-depends-on="phone1" class="form-control ob-input-number" data-validation="length" data-validation-length="7-8" />
               </div>
             </div>
           </div>
@@ -74,9 +73,6 @@ $(function() {
       style: 'fold',
       loadData: function() { return $.get('./validator.md') }
   });
-
-  // data-mask 처리
-  $.applyDataMask();
 });
 
   $.widget('outback.page', $.outback.basePage, {
