@@ -6,21 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
     <title>주소와 좌표 검색 API 사용하기</title>
 
-    <link rel="stylesheet" href="/styles/main.css">
-    <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.css">
-    <script src="/vendor/jquery.js"></script>
-    <script src="/vendor/bootstrap/js/bootstrap.js"></script>
-    <script src="/vendor/lodash.min.js"></script>
-    <script src="/vendor/moment.js"></script>
-    <script src="/vendor/numeral.js"></script>
-    <script src="/vendor/jquery.outback.js"></script>
-    <script src="/scripts/common.js"></script>
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../vendor/bootstrap/css/bootstrap.css">
+    <script src="../../vendor/jquery.js"></script>
+    <script src="../../vendor/bootstrap/js/bootstrap.js"></script>
+    <script src="../../vendor/lodash.min.js"></script>
+    <script src="../../vendor/moment.js"></script>
+    <script src="../../vendor/numeral.js"></script>
+    <script src="../../vendor/jquery.outback.js"></script>
+    <script src="../../scripts/common.js"></script>
 
     <!-- markdown -->
-    <link rel="stylesheet" href="/markdown/jquery-markview.css">
-    <script src="/markdown/d3.js"></script>
-    <script src="/markdown/marked.js"></script>
-    <script src="/markdown/jquery-markview.js"></script>
+    <link rel="stylesheet" href="../../markdown/jquery-markview.css">
+    <script src="../../markdown/d3.js"></script>
+    <script src="../../markdown/marked.js"></script>
+    <script src="../../markdown/jquery-markview.js"></script>
     <style>
       #markview {
         margin-top: 30px;
@@ -45,14 +45,17 @@
 <!-- @category Geocoder -->
 
 <style type="text/css">
-.search { position:absolute;z-index:1000;top:20px;left:20px; }
-.search #address { width:150px;height:20px;line-height:20px;border:solid 1px #555;padding:5px;font-size:12px;box-sizing:content-box; }
+.search { position:absolute;z-index:1000;top:100px;left:20px; }
+.search input[type='text'] { width:166px;height:20px;line-height:20px;border:solid 1px #555;padding:5px;font-size:12px;box-sizing:content-box; }
 .search #submit { height:30px;line-height:30px;padding:0 10px;font-size:12px;border:solid 1px #555;border-radius:3px;cursor:pointer;box-sizing:content-box; }
 
 .search2 { position:absolute;z-index:1000;top:60px;left:20px; }
-.search2 #latitude { width:150px;height:20px;line-height:20px;border:solid 1px #555;padding:5px;font-size:12px;box-sizing:content-box; }
-.search2 #longitude { width:150px;height:20px;line-height:20px;border:solid 1px #555;padding:5px;font-size:12px;box-sizing:content-box; }
+.search2 input[type='text'] { width:75px;height:20px;line-height:20px;border:solid 1px #555;padding:5px;font-size:12px;box-sizing:content-box; }
 .search2 #submit2 { height:30px;line-height:30px;padding:0 10px;font-size:12px;border:solid 1px #555;border-radius:3px;cursor:pointer;box-sizing:content-box; }
+
+.search3 { position:absolute;z-index:1000;top:20px;left:20px; }
+.search3 input[type='text'] { width:166px;height:20px;line-height:20px;border:solid 1px #555;padding:5px;font-size:12px;box-sizing:content-box; }
+.search3 #submit3 { height:30px;line-height:30px;padding:0 10px;font-size:12px;border:solid 1px #555;border-radius:3px;cursor:pointer;box-sizing:content-box; }
 </style>
 
 <div id="wrap" class="section">
@@ -67,6 +70,30 @@
             <input id="latitude" type="text" placeholder="위도" value="37.5271541" />
             <input id="submit2" type="button" value="좌표 검색" />
         </div>
+        <div class="search3" style="">
+            <input id="business" type="text" placeholder="지역 검색" value="현대카드" />
+            <input id="submit3" type="button" value="지역 검색" />
+        </div>
+    </div>
+    <div>
+      <p>open -na /Applications/Google\ Chrome.app/ --args --disable-web-security --user-data-dir=""</p>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">지역 검색 결과</h4>
+        </div>
+        <div class="modal-body">
+            ...
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+        </div>
+    </div>
     </div>
     <code id="snippet" class="snippet"></code>
 </div>
@@ -150,6 +177,55 @@ function searchAddressToCoordinate(address) {
     });
 }
 
+function searchLocalBusinessis(business) {
+  $.ajax({
+    type: 'get',
+    url: 'https://openapi.naver.com/v1/search/local.json',
+    beforeSend: function(xhr) {
+      xhr.setRequestHeader('X-Naver-Client-Id', 'p_eWle81iqGxftActgtK');
+	  xhr.setRequestHeader('X-Naver-Client-Secret', 'tDFPsuGldC');
+    },
+    dataType:'json',
+    data: {
+	    query : business,
+	    display : 5,
+	    start : 1,
+	    sort : "random"
+	  },
+    success: function(data) {
+      console.log(data);
+
+      $('#myModal .modal-body').empty();
+
+      var content = new Array();
+      $('#myModal .modal-body').append(
+          '<div style="padding:10px;min-width:600px;line-height:150%;">' +
+            '<div class="list-group">'
+      );
+
+      for ( var i = 0; i < data.items.length; i++ ) {
+          var item = data.items[i];
+          $('#myModal .modal-body').append(
+            '<a href="#" name="' + i + '" class="list-group-item">' +
+              '<h4 class="list-group-item-heading">' + item.title + '</h4>' +
+              '<p class="list-group-item-text">' + '지번주소 : ' + item.address + '</p>' +
+              '<p class="list-group-item-text">' + '도로명주소 : ' + item.roadAddress + '</p>' +
+            '</a>'
+          );
+          $('#myModal .modal-body [name="' + i + '"').on('click', function(e) {
+            var item = data.items[this.name];
+            console.log( item );
+            searchAddressToCoordinate( item.address );
+            $('#myModal').modal('hide');
+          });
+      }
+
+      $('#myModal .modal-body').append('</div></div>');
+      $('#myModal').modal('show');
+    }
+  });
+}
+
 function initGeocoder() {
     map.addListener('click', function(e) {
         searchCoordinateToAddress(e.coord);
@@ -158,22 +234,28 @@ function initGeocoder() {
     $('#address').on('keydown', function(e) {
         var keyCode = e.which;
 
-        if (keyCode === 13) { // Enter Key
-            searchAddressToCoordinate($('#address').val());
+        if ( keyCode === 13 ) { // Enter Key
+            searchAddressToCoordinate( $('#address').val() );
         }
     });
 
     $('#submit').on('click', function(e) {
         e.preventDefault();
 
-        searchAddressToCoordinate($('#address').val());
+        searchAddressToCoordinate( $('#address').val() );
     });
 
     $('#submit2').on('click', function(e) {
         e.preventDefault();
 
-        var point = new naver.maps.Point($('#longitude').val(), $('#latitude').val());
+        var point = new naver.maps.Point( $('#longitude').val(), $('#latitude').val() );
         searchCoordinateToAddress( point );
+    });
+
+    $('#submit3').on('click', function(e) {
+        e.preventDefault();
+
+        searchLocalBusinessis($('#business').val());
     });
 
     searchAddressToCoordinate('버드나루로17길 12');
