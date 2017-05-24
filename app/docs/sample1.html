@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sample Document</title>
+    <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.css">
+    <script src="../vendor/jquery.js"></script>
+    
+    <!-- markdown -->
+    <link rel="stylesheet" href="../markdown/jquery-markview.css">
+    <script src="../markdown/d3.js"></script>
+    <script src="../markdown/marked.js"></script>
+    <script src="../markdown/jquery-markview.js"></script>
+    <!-- sequence -->
+    <link rel="stylesheet" href="../mermaid/www/stylesheets/screen.css" media="screen"/>
+    <link rel="stylesheet" href="../mermaid/www/stylesheets/print.css" media="print"/>
+    <link rel="stylesheet" href="../mermaid/www/stylesheets/mermaid.forest.css"/>
+    <link rel="stylesheet" href="../mermaid/www/stylesheets/solarized_light.css"/>
+    <script>
+    $(function() {
+      var promise;
+      $('#markview').markview({
+          style: 'fold',
+          loadData: function() {
+            promise = $.get('./sample1.md');
+            return promise;
+          }
+      });
+    });
+    </script>
+  </head>
+  <body>
+    <div id="markview"></div>
+  </body>
+</html>
