@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
-    <title>주소와 좌표 검색 API 사용하기</title>
+    <title>[Naver API] 주소와 좌표 검색 API 사용하기</title>
 
     <link rel="stylesheet" href="../../styles/main.css">
     <link rel="stylesheet" href="../../vendor/bootstrap/css/bootstrap.css">
@@ -38,7 +38,7 @@
 
       }
     </style>
-    <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?clientId=p_eWle81iqGxftActgtK&amp;submodules=geocoder"></script>
+    <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?clientId=p_eWle81iqGxftActgtK&submodules=geocoder"></script>
 </head>
 <body>
 
@@ -80,20 +80,20 @@
     </div>
     <!-- Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="myModalLabel">지역 검색 결과</h4>
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">지역 검색 결과</h4>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+            </div>
         </div>
-        <div class="modal-body">
-            ...
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
-        </div>
-    </div>
     </div>
     <code id="snippet" class="snippet"></code>
 </div>
