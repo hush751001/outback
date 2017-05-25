@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <title>[Daum API] 주소와 좌표 검색 API 사용하기</title>
+
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../vendor/bootstrap/css/bootstrap.css">
+    <script src="../../vendor/jquery.js"></script>
+    <script src="../../vendor/bootstrap/js/bootstrap.js"></script>
+    <script src="../../vendor/lodash.min.js"></script>
+    <script src="../../vendor/moment.js"></script>
+    <script src="../../vendor/numeral.js"></script>
+    <script src="../../vendor/jquery.outback.js"></script>
+    <script src="../../scripts/common.js"></script>
+
+    <!-- markdown -->
+    <link rel="stylesheet" href="../../markdown/jquery-markview.css">
+    <script src="../../markdown/d3.js"></script>
+    <script src="../../markdown/marked.js"></script>
+    <script src="../../markdown/jquery-markview.js"></script>
+    <style>
+      #markview {
+        margin-top: 30px;
+      }
+    </style>
+    <style>
+      .btn {
+        vertical-align: inherit;
+      }
+      .btn-block {
+        display: inline;
+        width: 49%;
+      }
+      .form-control {
+
+      }
+    </style>
+    <script type="text/javascript" src="//apis.daum.net/maps/maps3.js?apikey=0d112ced836692346408558b330250c7&libraries=services"></script>
+</head>
+<body>
+
+<!-- @category Geocoder -->
+
+<style type="text/css">
+.search { position:absolute;z-index:1000;top:100px;left:20px; }
+.search input[type='text'] { width:166px;height:20px;line-height:20px;border:solid 1px #555;padding:5px;font-size:12px;box-sizing:content-box; }
+.search #submit { height:30px;line-height:30px;padding:0 10px;font-size:12px;border:solid 1px #555;border-radius:3px;cursor:pointer;box-sizing:content-box; }
+
+.search2 { position:absolute;z-index:1000;top:60px;left:20px; }
+.search2 input[type='text'] { width:75px;height:20px;line-height:20px;border:solid 1px #555;padding:5px;font-size:12px;box-sizing:content-box; }
+.search2 #submit2 { height:30px;line-height:30px;padding:0 10px;font-size:12px;border:solid 1px #555;border-radius:3px;cursor:pointer;box-sizing:content-box; }
+
+.search3 { position:absolute;z-index:1000;top:20px;left:20px; }
+.search3 input[type='text'] { width:166px;height:20px;line-height:20px;border:solid 1px #555;padding:5px;font-size:12px;box-sizing:content-box; }
+.search3 #submit3 { height:30px;line-height:30px;padding:0 10px;font-size:12px;border:solid 1px #555;border-radius:3px;cursor:pointer;box-sizing:content-box; }
+</style>
+<style>
+    .map_wrap {position:relative;width:100%;height:350px;}
+    .title {font-weight:bold;display:block;}
+    .hAddr {position:absolute;left:10px;top:10px;border-radius: 2px;background:#fff;background:rgba(255,255,255,0.8);z-index:1;padding:5px;}
+    #centerAddr {display:block;margin-top:2px;font-weight: normal;}
+    .bAddr {padding:5px;text-overflow: ellipsis;overflow: hidden;white-space: nowrap;}
+</style>
+
+<div id="wrap" class="section">
+    <h2>주소와 좌표 검색 API 사용하기</h2>
+    <div id="map" style="width:100%;height:600px;">
+        <div class="search" style="">
+            <input id="address" type="text" placeholder="검색할 주소" value="의사당대로 18" />
+            <input id="submit" type="button" value="주소 검색" />
+        </div>
+        <div class="search2" style="">
+            <input id="longitude" type="text" placeholder="경도" value="126.9176277" />
+            <input id="latitude" type="text" placeholder="위도" value="37.5271541" />
+            <input id="submit2" type="button" value="좌표 검색" />
+        </div>
+        <div class="search3" style="">
+            <input id="business" type="text" placeholder="지역 검색" value="현대카드" />
+            <input id="submit3" type="button" value="지역 검색" />
+        </div>
+    </div>
+    <div class="hAddr">
+        <span class="title">지도중심기준 행정동 주소정보</span>
+        <span id="centerAddr"></span>
+    </div>
+    <div>
+      <p>open -na /Applications/Google\ Chrome.app/ --args --disable-web-security --user-data-dir=""</p>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">지역 검색 결과</h4>
+        </div>
+        <div class="modal-body">
+            ...
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+        </div>
+    </div>
+    </div>
+    <code id="snippet" class="snippet"></code>
+</div>
+
+<script>
+var mapContainer = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
+var mapOptions = { //지도를 생성할 때 필요한 기본 옵션
+	center: new daum.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
+	level: 3 //지도의 레벨(확대, 축소 정도)
+};
+
+var map = new daum.maps.Map(mapContainer, mapOptions); //지도 생성 및 객체 리턴
+
+var iwContent = '<div style="padding:5px;">Hello World!</div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+    iwPosition = new daum.maps.LatLng(33.450701, 126.570667), //인포윈도우 표시 위치입니다
+    iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
+
+// 인포윈도우를 생성하고 지도에 표시합니다
+var infoWindow = new daum.maps.InfoWindow({
+    map: map, // 인포윈도우가 표시될 지도
+    position : iwPosition, 
+    content : iwContent,
+    removable : iwRemoveable
+});
+      
+// 아래 코드는 인포윈도우를 지도에서 제거합니다
+// infoWindow.close(); 
+
+
+// 주소-좌표 변환 객체를 생성합니다
+var geocoder = new daum.maps.services.Geocoder();
+
+var marker = new daum.maps.Marker(), // 클릭한 위치를 표시할 마커입니다
+    infoWindow = new daum.maps.InfoWindow({zindex:1}); // 클릭한 위치에 대한 주소를 표시할 인포윈도우입니다
+
+// 현재 지도 중심좌표로 주소를 검색해서 지도 좌측 상단에 표시합니다
+searchAddrFromCoords(map.getCenter(), displayCenterInfo);
+
+
+function searchCoordinateToAddress(latLng) {
+    infoWindow.close();
+
+    searchDetailAddrFromCoords(latLng, function(status, result) {
+        if (status === daum.maps.services.Status.OK) {
+            var detailAddr = !!result[0].roadAddress.name ? '<div>도로명주소 : ' + result[0].roadAddress.name + '</div>' : '';
+            detailAddr += '<div>지번 주소 : ' + result[0].jibunAddress.name + '</div>';
+            
+            var content = '<div class="bAddr">' +
+                            '<span class="title">법정동 주소정보</span>' + 
+                            detailAddr + 
+                        '</div>';
+
+//            marker.setPosition(latLng);
+//            marker.setMap(map);
+
+            // 위치에 대한 법정동 상세 주소정보를 표시합니다
+//            infoWindow.setContent(content);
+//            infoWindow.open(map, marker);
+        }   
+    });
+}
+
+// 지도를 클릭했을 때 클릭 위치 좌표에 대한 주소정보를 표시하도록 이벤트를 등록합니다
+daum.maps.event.addListener(map, 'click', function(mouseEvent) {
+    searchDetailAddrFromCoords(mouseEvent.latLng, function(status, result) {
+        if (status === daum.maps.services.Status.OK) {
+            var detailAddr = !!result[0].roadAddress.name ? '<div>도로명주소 : ' + result[0].roadAddress.name + '</div>' : '';
+            detailAddr += '<div>지번 주소 : ' + result[0].jibunAddress.name + '</div>';
+            
+            var content = '<div class="bAddr">' +
+                            '<span class="title">법정동 주소정보</span>' + 
+                            detailAddr + 
+                        '</div>';
+
+            // 마커를 클릭한 위치에 표시합니다 
+            marker.setPosition(mouseEvent.latLng);
+            marker.setMap(map);
+
+            // 인포윈도우에 클릭한 위치에 대한 법정동 상세 주소정보를 표시합니다
+            infoWindow.setContent(content);
+            infoWindow.open(map, marker);
+        }   
+    });
+});
+
+$('#submit2').on('click', function(e) {
+    e.preventDefault();
+
+    var point = new daum.maps.LatLng( $('#longitude').val(), $('#latitude').val() );
+    searchCoordinateToAddress( point );
+});
+
+// 중심 좌표나 확대 수준이 변경됐을 때 지도 중심 좌표에 대한 주소 정보를 표시하도록 이벤트를 등록합니다
+daum.maps.event.addListener(map, 'idle', function() {
+    searchAddrFromCoords(map.getCenter(), displayCenterInfo);
+});
+
+function searchAddrFromCoords(coords, callback) {
+    // 좌표로 행정동 주소 정보를 요청합니다
+    geocoder.coord2addr(coords, callback);         
+}
+
+function searchDetailAddrFromCoords(coords, callback) {
+    // 좌표로 법정동 상세 주소 정보를 요청합니다
+    geocoder.coord2detailaddr(coords, callback);
+}
+
+// 지도 좌측상단에 지도 중심좌표에 대한 주소정보를 표출하는 함수입니다
+function displayCenterInfo(status, result) {
+    if (status === daum.maps.services.Status.OK) {
+        var infoDiv = document.getElementById('centerAddr');
+        infoDiv.innerHTML = result[0].fullName;
+    }    
+}
+
+function initGeocoder() {
+    
+
+    $('#address').on('keydown', function(e) {
+        var keyCode = e.which;
+
+        if ( keyCode === 13 ) { // Enter Key
+            searchAddressToCoordinate( $('#address').val() );
+        }
+    });
+
+    $('#submit').on('click', function(e) {
+        e.preventDefault();
+
+        searchAddressToCoordinate( $('#address').val() );
+    });
+
+    
+
+    $('#submit3').on('click', function(e) {
+        e.preventDefault();
+
+        searchLocalBusinessis($('#business').val());
+    });
+
+    searchAddressToCoordinate('버드나루로17길 12');
+}
+</script>
+</body>
+</html>
