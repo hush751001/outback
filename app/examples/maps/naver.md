@@ -79,7 +79,7 @@ naver.maps.Service.reverseGeocode({
         </tr>
     </thead>
     <tbody>
-      <tr><td>LAT_LNG</td><td>검색하려는 좌표<br />new naver.maps.LatLng(latitude, longitude)</td></tr>
+      <tr><td>LAT_LNG</td><td>검색하려는 좌표<br />new naver.maps.LatLng(longitude, latitude)</td></tr>
 </table> 
 
 #### Response JSON
