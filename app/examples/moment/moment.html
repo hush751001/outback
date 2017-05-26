@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Moment</title>
+    <title>Moment.js Example</title>
     <link rel="stylesheet" href="../../styles/main.css">
     <link rel="stylesheet" href="../../vendor/bootstrap/css/bootstrap.css">
     <script src="../../vendor/jquery.js"></script>
@@ -41,7 +41,7 @@
     <div data-role="page">
       <div class="container">
         <form class="form-signin">
-          <h2 class="form-signin-heading">Moment Sample</h2>
+          <h2 class="form-signin-heading">Moment.js Example</h2>
 
           <label class="control-label" for="inputDate">Date</label>
           <input type="text" id="inputDate" class="form-control" placeholder="Enter date to change format." required autofocus><br />
@@ -54,13 +54,18 @@
           <button id="btnChange" class="btn btn-lg btn-primary btn-block" type="button">Change</button>
         </form>
       </div> <!-- /container -->
-    
+      <div id="markview"></div>
     </div>
     
     <script>
+$(function() {
+  $('#markview').markview({
+      style: 'fold',
+      loadData: function() { return $.get('./moment.md') }
+  });
+});
 
 (function( $ ) {
-
 $.widget('outback.page', $.outback.basePage, {
   _create: function() {
     // MUST : basePage의 _create()를 호출한다.

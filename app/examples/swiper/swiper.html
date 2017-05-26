@@ -91,9 +91,15 @@
           <!-- If we need scrollbar -->
           <div class="swiper-scrollbar"></div>
       </div>
+      <div id="markview"></div>
     </div>
 <script>
-
+$(function() {
+  $('#markview').markview({
+      style: 'fold',
+      loadData: function() { return $.get('./swiper.md') }
+  });
+});
 (function( $ ) {
 
 $.widget('outback.page', $.outback.basePage, {

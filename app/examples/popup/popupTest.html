@@ -27,6 +27,7 @@
     <div data-role="page">
       <h1>Popup Test</h1>
       <button id="btnOK">확인</button>
+      <div id="markview"></div>
     </div>
 
     <div data-role="popup" id="popupTelecom" style="width:500px;height:500px;">
@@ -52,6 +53,12 @@
     </div>
 
 <script>
+$(function() {
+  $('#markview').markview({
+      style: 'fold',
+      loadData: function() { return $.get('./popupTest.md') }
+  });
+});
 
 (function( $ ) {
 
