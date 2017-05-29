@@ -187,7 +187,11 @@ function searchAddressToCoordinate(address) {
     });
 }
 
-function searchLocalBusinessis(business) {
+var DISPLAY_COUNT = 5;
+var totalPage = 1;
+var currentPage = 1;
+
+function searchLocalBusinessis(business, page) {
   $.ajax({
     type: 'get',
     url: 'https://openapi.naver.com/v1/search/local.json',
@@ -198,13 +202,23 @@ function searchLocalBusinessis(business) {
     dataType:'json',
     data: {
 	    query : business,
-	    display : 5,
-	    start : 1,
+	    display : DISPLAY_COUNT,
+	    start : ((page - 1) * DISPLAY_COUNT) + 1,
 	    sort : "random"
 	  },
     success: function(data) {
       console.log(data);
 
+	  if ( response.total % response.display == 0 ) {
+			  totalPage = response.total / response.display;
+	  } else {
+			  totalPage = (response.total / response.display) + 1;
+	  }
+
+	  currentPage = 1;
+	  while( response.start > (currentPage * response.display) ) {
+			  currentPage++;
+	  }
       $('#myModal .modal-body').empty();
 
       var content = new Array();
@@ -265,7 +279,7 @@ function initGeocoder() {
     $('#submit3').on('click', function(e) {
         e.preventDefault();
 
-        searchLocalBusinessis($('#business').val());
+        searchLocalBusinessis($('#business').val(), 1);
     });
 
     searchAddressToCoordinate('버드나루로17길 12');
