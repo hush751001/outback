@@ -206,8 +206,8 @@ function searchLocalBusinessis(business, page) {
 	    start : ((page - 1) * DISPLAY_COUNT) + 1,
 	    sort : "random"
 	  },
-    success: function(data) {
-      console.log(data);
+    success: function(response) {
+      console.log(response);
 
 	  if ( response.total % response.display == 0 ) {
 			  totalPage = response.total / response.display;
@@ -227,8 +227,8 @@ function searchLocalBusinessis(business, page) {
             '<div class="list-group">'
       );
 
-      for ( var i = 0; i < data.items.length; i++ ) {
-          var item = data.items[i];
+      for ( var i = 0; i < response.items.length; i++ ) {
+          var item = response.items[i];
           $('#myModal .modal-body').append(
             '<a href="#" name="' + i + '" class="list-group-item">' +
               '<h4 class="list-group-item-heading">' + item.title + '</h4>' +
@@ -237,7 +237,7 @@ function searchLocalBusinessis(business, page) {
             '</a>'
           );
           $('#myModal .modal-body [name="' + i + '"').on('click', function(e) {
-            var item = data.items[this.name];
+            var item = response.items[this.name];
             console.log( item );
             searchAddressToCoordinate( item.address );
             $('#myModal').modal('hide');
