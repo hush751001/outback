@@ -61,9 +61,9 @@
     };
     
     $.debounce = function(delay, at_begin, callback) {
-      return callback === undefined ? jq_throttle(delay, at_begin, false);
+      return callback === undefined ? jq_throttle(delay, at_begin, false) : jq_throttle(delay, callback, at_begin !== false);
     }
-  });
+  })(jQuery, window);
   
   /*!
    * Bowser - a browser detector
