@@ -899,16 +899,10 @@
 
   (function( $, window, undefined ) {
     $.extend( $.outback, {
-      version: "2.0.0",
+      version: "1.0.0",
 
       // Keepnative Selector
-      keepNative: "[data-role='none'], [data-role='nojs']",
-
-      // Deprecated in 1.4 remove in 1.5
-      // Class used for "active" button state, from CSS framework
-      activeBtnClass: "ui-btn-active",
-
-      focusClass: "ui-focus"
+      keepNative: "[data-role='none'], [data-role='nojs']"
     });
 
     jQuery.queryParameters = function(url) {
@@ -1396,11 +1390,6 @@
     });
 
     fakeBody.remove();
-
-    // For ruling out shadows via css
-    if ( !$.support.boxShadow ) {
-      $( "html" ).addClass( "ui-noboxshadow" );
-    }
 
   })( jQuery );
 
@@ -3088,11 +3077,6 @@
 // Make sure $.widget still has bridge and extend methods
     $.extend( $.widget, originalWidget );
 
-// For backcompat remove in 1.5
-    $.outback.document.on( "create", function( event ) {
-      $( event.target ).enhanceWithin();
-    });
-
     /**
      * basePage Widget
      */
@@ -3115,12 +3099,12 @@
           self.onInitPage.call(self);
 
           // page가 보이게 한다.
-          $("html").removeClass( "ui-mobile-rendering" );
+          $("html").removeClass( "ob-rendering" );
         };
 
         window.onHistoryBackPage = function() {
           // popup이 떠있는 상태에서 Android의 하드웨어 이전버튼을 누를 경우 팝업을 닫는다.
-          var $popup = $('.ui-popup-active');
+          var $popup = $('.ob-popup-active');
           if($popup.length) {
             $popup.popup('close');
             return;
@@ -3151,21 +3135,12 @@
 
         this.element
           .attr( "tabindex", "0" )
-          .addClass( "ui-page ui-page-theme-" + this.options.theme );
-
-        // Manipulation of content os Deprecated as of 1.4 remove in 1.5
-        this.element.find( "[" + attrPrefix + "role='content']" ).each( function() {
-          var $this = $( this ),
-            theme = this.getAttribute( attrPrefix + "theme" ) || undefined;
-          $this.addClass( "ui-content" );
-          // Add ARIA role
-          $this.attr( "role", "main" ).addClass( "ui-content" );
-        });
+          .addClass( "ob-page ob-page-theme-" + this.options.theme );
       },
 
       _setOptions: function( o ) {
         if ( o.theme !== undefined ) {
-          this.element.removeClass( "ui-page-theme-" + this.options.theme ).addClass( "ui-page-theme-" + o.theme );
+          this.element.removeClass( "ob-page-theme-" + this.options.theme ).addClass( "ob-page-theme-" + o.theme );
         }
       },
 
@@ -3193,7 +3168,7 @@
    */
   (function( $ ) {
     // TODO move loader class down into the widget settings
-    var loaderClass = "ui-loader", $html = $( "html" );
+    var loaderClass = "ob-loader", $html = $( "html" );
 
     $.widget( "outback.loader", {
       // NOTE if the global config settings are defined they will override these
@@ -3217,7 +3192,7 @@
       },
 
       defaultHtml: "<div class='" + loaderClass + "'>" +
-      "<span class='ui-icon-loading'></span>" +
+      "<span class='ob-icon-loading'></span>" +
       "<h1></h1>" +
       "</div>",
 
@@ -3240,7 +3215,7 @@
           screenHeight = $.outback.getScreenHeight();
 
         if ( offset.top < scrollTop || ( offset.top - scrollTop ) > screenHeight ) {
-          this.element.addClass( "ui-loader-fakefix" );
+          this.element.addClass( "ob-loader-fakefix" );
           this.fakeFixLoader();
           this.window
             .unbind( "scroll", this.checkLoaderPosition )
@@ -3286,7 +3261,7 @@
         message = msgText || ( loadSettings.text === false ? "" : loadSettings.text );
 
         // prepare the dom
-        $html.addClass( "ui-loading" );
+        $html.addClass( "ob-loading" );
 
         textVisible = loadSettings.textVisible;
 
@@ -3294,8 +3269,8 @@
         // Force text visibility if the second argument was supplied, or
         // if the text was explicitly set in the object args
         this.element.attr("class", loaderClass +
-          " ui-loader-" + ( textVisible || msgText || theme.text ? "verbose" : "default" ) +
-          ( loadSettings.textonly || textonly ? " ui-loader-textonly" : "" ) );
+          " ob-loader-" + ( textVisible || msgText || theme.text ? "verbose" : "default" ) +
+          ( loadSettings.textonly || textonly ? " ob-loader-textonly" : "" ) );
 
         // TODO verify that jquery.fn.html is ok to use in both cases here
         //    this might be overly defensive in preventing unknowing xss
@@ -3316,7 +3291,7 @@
         // on scroll check the loader position
         this.window.bind( "scroll", $.proxy( this.checkLoaderPosition, this ) );
 
-        $('body').append('<div class="ui-loader-bg"></div>');
+        $('body').append('<div class="ob-loader-bg"></div>');
       },
 
       hide: function(all) {
@@ -3333,21 +3308,54 @@
           this.count = 0;
         }
 
-        $html.removeClass( "ui-loading" );
+        $html.removeClass( "ob-loading" );
 
         if ( this.options.text ) {
-          this.element.removeClass( "ui-loader-fakefix" );
+          this.element.removeClass( "ob-loader-fakefix" );
         }
 
         $.outback.window.unbind( "scroll", this.fakeFixLoader );
         $.outback.window.unbind( "scroll", this.checkLoaderPosition );
 
-        $(".ui-loader-bg").remove();
+        $(".ob-loader-bg").remove();
       }
     });
 
   })(jQuery, this);
 
+  /**
+   * partial page
+   */
+  (function( $, window, undefined ) {
+    $.widget( "outback.partialPageContainer", {
+      options: {
+        status: 0,
+        url: ''
+      },
+      
+      _create: function() {
+        var self = this, $element = this.element, o = this.options;
+        $element.addClass( 'ob-partial-page-container' );
+        
+        if ( o.url && o.url.length > 0 ) {
+          self.load( o.url );
+        }
+      },
+      load: function( url ) {
+        var $element = this.element;
+        if ( url && url.length > 0 ) {
+          $.outback.ajax({
+            url: url
+          }).done( function( response ) {
+            $element.empty();
+            $element.append( response );
+            $element.enhanceWithin();
+          });
+        }
+      }
+    });
+  })( jQuery, this );
+  
   /**
    * outback entry point
    */
