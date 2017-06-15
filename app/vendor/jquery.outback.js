@@ -1169,6 +1169,9 @@
           keepNative = $.outback.page.prototype.keepNativeSelector(),
           that = this;
 
+        // for external components
+        $(document).trigger('componentinit', [that]);
+        
         // Enhance widgets
         $.each( $.outback.widgets, function( name, constructor ) {
 
