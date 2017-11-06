@@ -6,8 +6,8 @@
  */
 
 (function ( root, doc, factory ) {
-  if ( typeof define === 'function' && define.amd ) {
-    define( [ 'jquery' ], function ( $ ) {
+  if ( typeof define === "function" && define.amd ) {
+    define( [ "jquery" ], function ( $ ) {
       factory( $, root, doc );
       return $.outback;
     });
@@ -17,49 +17,6 @@
   }
 }( this, document, function ( jQuery, window, document, undefined ) {
 
-  /**
-   * jQuery throttle / debounce - v1.1 
-   */
-    (function( $, window, undefined ) {
-        $.throttle = jq_throttle = function(delay, no_trailing, callback, debounce_mode) {
-            var timeout_id, last_exec = 0;
-            if ( typeof no_trailing !== 'boolean' ) {
-                debounce_mode = callback;
-                callback = no_trailing;
-                no_trailing = undefined;
-            }
-            function wrapper() {
-                var that = this, elapsed = +new Date() - last_exec, args = arguments;
-                function exec() {
-                    last_exec = +new Date();
-                    callback.apply(that,args);
-                }
-                function clear() {
-                    timeout_id = undefined;
-                }
-                if(debounce_mode && !timeout_id) {
-                    exec();
-                }
-                timeout_id && clearTimeout(timeout_id);
-                
-                if ( debounce_mode === undefined && elapsed > delay ) {
-                    exec();
-                } else if(no_trailing !== true) {
-                    timeout_id = setTimeout(debounce_mode ? clear : exec, debounce_mode === undefined ? delay - elapsed : delay);
-                }
-            }
-            if( $.guid ) {
-                wrapper.guid = callback.guid = callback.guid || $.guid++;
-            }
-            return wrapper;
-        }
-        
-        $.debounce = function( delay,at_begin,callback ) {
-            return callback === undefined ? jq_throttle(delay, at_begin, false) : jq_throttle(delay, callback, at_begin !== false);
-        }
-        
-    })( jQuery, window );
-    
   /*!
    * Bowser - a browser detector
    * https://github.com/ded/bowser
@@ -367,17 +324,17 @@
       // set webkit or gecko flag for browsers based on these engines
       if (!result.msedge && /(apple)?webkit/i.test(ua)) {
         if (/(apple)?webkit\/537\.36/i.test(ua)) {
-          result.name = result.name || 'Blink'
+          result.name = result.name || "Blink"
           result.blink = t
         } else {
-          result.name = result.name || 'Webkit'
+          result.name = result.name || "Webkit"
           result.webkit = t
         }
         if (!result.version && versionIdentifier) {
           result.version = versionIdentifier
         }
       } else if (!result.opera && /gecko\//i.test(ua)) {
-        result.name = result.name || 'Gecko'
+        result.name = result.name || "Gecko"
         result.gecko = t
         result.version = result.version || getFirstMatch(/gecko\/(\d+(\.\d+)?)/i)
       }
@@ -454,7 +411,7 @@
         (result.firefox && result.version >= 20.0) ||
         (result.safari && result.version >= 6) ||
         (result.opera && result.version >= 10.0) ||
-        (result.ios && result.osversion && result.osversion.split('.')[0] >= 6) ||
+        (result.ios && result.osversion && result.osversion.split(".")[0] >= 6) ||
         (result.blackberry && result.version >= 10.1)
         || (result.chromium && result.version >= 20)
       ) {
@@ -465,7 +422,7 @@
         (result.firefox && result.version < 20.0) ||
         (result.safari && result.version < 6) ||
         (result.opera && result.version < 10.0) ||
-        (result.ios && result.osversion && result.osversion.split('.')[0] < 6)
+        (result.ios && result.osversion && result.osversion.split(".")[0] < 6)
         || (result.chromium && result.version < 20)
       ) {
         result.c = t
@@ -498,7 +455,7 @@
      * @return {number}
      */
     function getVersionPrecision(version) {
-      return version.split('.').length;
+      return version.split(".").length;
     }
 
     /**
@@ -538,11 +495,11 @@
         var delta = precision - getVersionPrecision(version);
 
         // 2) "9" -> "9.0" (for precision = 2)
-        version = version + new Array(delta + 1).join('.0');
+        version = version + new Array(delta + 1).join(".0");
 
-        // 3) "9.0" -> ["000000000'', "000000009"]
-        return map(version.split('.'), function (chunk) {
-          return new Array(20 - chunk.length).join('0') + chunk;
+        // 3) "9.0" -> ["000000000"", "000000009"]
+        return map(version.split("."), function (chunk) {
+          return new Array(20 - chunk.length).join("0") + chunk;
         }).reverse();
       });
 
@@ -598,7 +555,7 @@
         _bowser = detect(ua);
       }
 
-      var version = '' + _bowser.version;
+      var version = "" + _bowser.version;
       for (var browser in minVersions) {
         if (minVersions.hasOwnProperty(browser)) {
           if (_bowser[browser]) {
@@ -738,7 +695,7 @@
     // provide this event for the window element, for other elements a polling
     // loop is initialized, running every <jQuery.resize.delay> milliseconds
     // to see if elements' dimensions have changed. You may bind with either
-    // .resize( fn ) or .bind( 'resize', fn ), and unbind with .unbind( 'resize' ).
+    // .resize( fn ) or .bind( "resize", fn ), and unbind with .unbind( "resize" ).
     // 
     // Usage:
     // 
@@ -894,10 +851,16 @@
 
   (function( $, window, undefined ) {
     $.extend( $.outback, {
-      version: '1.0.0',
+      version: "2.0.0",
 
       // Keepnative Selector
-      keepNative: '[data-role="none"], [data-role="nojs"], .no-js'
+      keepNative: "[data-role='none'], [data-role='nojs']",
+
+      // Deprecated in 1.4 remove in 1.5
+      // Class used for "active" button state, from CSS framework
+      activeBtnClass: "ui-btn-active",
+
+      focusClass: "ui-focus"
     });
 
     jQuery.queryParameters = function(url) {
@@ -928,17 +891,17 @@
         element = element.jquery ? element[0] : element;
 
         if ( element && element.getAttribute ) {
-          data = element.getAttribute( 'data-' + key );
+          data = element.getAttribute( "data-" + key );
         }
 
         // Copied from core's src/data.js:dataAttr()
         // Convert from a string to a proper data type
         try {
-          data = data === 'true' ? true :
-            data === 'false' ? false :
-              data === 'null' ? null :
+          data = data === "true" ? true :
+            data === "false" ? false :
+              data === "null" ? null :
                 // Only convert to a number if it doesn't change the string
-                +data + '' === data ? +data :
+                +data + "" === data ? +data :
                   rbrace.test( data ) ? JSON.parse( data ) :
                     data;
         } catch( err ) {}
@@ -953,8 +916,8 @@
       // doing a similar parent node traversal to the one found in the inherited theme code above
       closestPageData: function( $target ) {
         return $target
-          .closest( '[data-role="page"]' )
-          .data( 'outback-page' );
+          .closest( "data-role='page'" )
+          .data( "outback-page" );
       }
     });
 
@@ -976,7 +939,7 @@
     $.fn.extend({
       focus: (function( orig ) {
         return function( delay, fn ) {
-          return typeof delay === 'number' ?
+          return typeof delay === "number" ?
             this.each(function() {
               var elem = this;
               setTimeout(function() {
@@ -991,18 +954,18 @@
       })( $.fn.focus ),
 
       scrollParent: function() {
-        var position = this.css( 'position' ),
-          excludeStaticParent = position === 'absolute',
+        var position = this.css( "position" ),
+          excludeStaticParent = position === "absolute",
           overflowRegex = includeHidden ? /(auto|scroll|hidden)/ : /(auto|scroll)/,
           scrollParent = this.parents().filter( function() {
             var parent = $( this );
-            if ( excludeStaticParent && parent.css( 'position' ) === 'static' ) {
+            if ( excludeStaticParent && parent.css( "position" ) === "static" ) {
               return false;
             }
-            return overflowRegex.test( parent.css( 'overflow' ) + parent.css( 'overflow-y' ) + parent.css( 'overflow-x' ) );
+            return overflowRegex.test( parent.css( "overflow" ) + parent.css( "overflow-y" ) + parent.css( "overflow-x" ) );
           }).eq( 0 );
 
-        return position === 'fixed' || !scrollParent.length ? $( this[ 0 ].ownerDocument || document ) : scrollParent;
+        return position === "fixed" || !scrollParent.length ? $( this[ 0 ].ownerDocument || document ) : scrollParent;
       },
 
       uniqueId: (function() {
@@ -1010,7 +973,7 @@
         return function() {
           return this.each(function() {
             if ( !this.id ) {
-              this.id = 'ui-id-' + (++uuid);
+              this.id = "ui-id-" + (++uuid);
             }
           });
         };
@@ -1019,7 +982,7 @@
       removeUniqueId: function() {
         return this.each(function() {
           if ( /^ui-id-\d+$/.test( this.id ) ) {
-            $( this ).removeAttr( 'id' );
+            $( this ).removeAttr( "id" );
           }
         });
       }
@@ -1029,18 +992,18 @@
     function focusable( element, isTabIndexNotNaN ) {
       var map, mapName, img,
         nodeName = element.nodeName.toLowerCase();
-      if ( 'area' === nodeName ) {
+      if ( "area" === nodeName ) {
         map = element.parentNode;
         mapName = map.name;
-        if ( !element.href || !mapName || map.nodeName.toLowerCase() !== 'map' ) {
+        if ( !element.href || !mapName || map.nodeName.toLowerCase() !== "map" ) {
           return false;
         }
-        img = $( 'img[usemap=#' + mapName + ']' )[0];
+        img = $( "img[usemap=#" + mapName + "]" )[0];
         return !!img && visible( img );
       }
       return ( /input|select|textarea|button|object/.test( nodeName ) ?
           !element.disabled :
-          'a' === nodeName ?
+          "a" === nodeName ?
           element.href || isTabIndexNotNaN :
             isTabIndexNotNaN) &&
           // the element and all of its ancestors must be visible
@@ -1054,7 +1017,7 @@
         }).length;
     }
 
-    $.extend( $.expr[ ':' ], {
+    $.extend( $.expr[ ":" ], {
       data: $.expr.createPseudo ?
         $.expr.createPseudo(function( dataName ) {
           return function( elem ) {
@@ -1067,33 +1030,33 @@
         },
 
       focusable: function( element ) {
-        return focusable( element, !isNaN( $.attr( element, 'tabindex' ) ) );
+        return focusable( element, !isNaN( $.attr( element, "tabindex" ) ) );
       },
 
       tabbable: function( element ) {
-        var tabIndex = $.attr( element, 'tabindex' ),
+        var tabIndex = $.attr( element, "tabindex" ),
           isTabIndexNaN = isNaN( tabIndex );
         return ( isTabIndexNaN || tabIndex >= 0 ) && focusable( element, !isTabIndexNaN );
       }
     });
 
-    $.support.selectstart = 'onselectstart' in document.createElement( 'div' );
+    $.support.selectstart = "onselectstart" in document.createElement( "div" );
 
     $.fn.extend({
       disableSelection: function() {
-        return this.bind( ( $.support.selectstart ? 'selectstart' : 'mousedown' ) +
-          '.ob-disableSelection', function( event ) {
+        return this.bind( ( $.support.selectstart ? "selectstart" : "mousedown" ) +
+          ".ui-disableSelection", function( event ) {
           event.preventDefault();
         });
       },
 
       enableSelection: function() {
-        return this.unbind( '.ob-disableSelection' );
+        return this.unbind( ".ui-disableSelection" );
       },
 
       zIndex: function( zIndex ) {
         if ( zIndex !== undefined ) {
-          return this.css( 'zIndex', zIndex );
+          return this.css( "zIndex", zIndex );
         }
 
         if ( this.length ) {
@@ -1102,13 +1065,13 @@
             // Ignore z-index if position is set to a value where z-index is ignored by the browser
             // This makes behavior of this function consistent across browsers
             // WebKit always returns auto if the element is positioned
-            position = elem.css( 'position' );
-            if ( position === 'absolute' || position === 'relative' || position === 'fixed' ) {
+            position = elem.css( "position" );
+            if ( position === "absolute" || position === "relative" || position === "fixed" ) {
               // IE returns 0 when zIndex is not specified
               // other browsers return a string
               // we ignore the case of nested elements with an explicit value of 0
               // <div style="z-index: -10;"><div style="z-index: 0;"></div></div>
-              value = parseInt( elem.css( 'zIndex' ), 10 );
+              value = parseInt( elem.css( "zIndex" ), 10 );
               if ( !isNaN( value ) && value !== 0 ) {
                 return value;
               }
@@ -1158,8 +1121,6 @@
           keepNative = $.outback.page.prototype.keepNativeSelector(),
           that = this;
 
-        $(document).trigger('componentinit', [that]);
-        
         // Enhance widgets
         $.each( $.outback.widgets, function( name, constructor ) {
 
@@ -1187,7 +1148,7 @@
         for ( index in widgetElements ) {
           widgetElements[ index ][ index ]();
         }
-        
+
         return this;
       },
 
@@ -1195,7 +1156,7 @@
       // or setting of an html element's text, its only purpose is
       // to return the html encoded version of the text in all cases. (thus the name)
       getEncodedText: function() {
-        return $( '<a>' ).text( this.text() ).html();
+        return $( "<a>" ).text( this.text() ).html();
       }
     });
 
@@ -1220,17 +1181,17 @@
           docElem = doc.documentElement,
           refNode = docElem.firstElementChild || docElem.firstChild,
         // fakeBody required for <FF4 when executed in <head>
-          fakeBody = doc.createElement( 'body' ),
-          div = doc.createElement( 'div' );
+          fakeBody = doc.createElement( "body" ),
+          div = doc.createElement( "div" );
 
-        div.id = 'mq-test-1';
-        div.style.cssText = 'position:absolute;top:-100em';
-        fakeBody.style.background = 'none';
+        div.id = "mq-test-1";
+        div.style.cssText = "position:absolute;top:-100em";
+        fakeBody.style.background = "none";
         fakeBody.appendChild(div);
 
         return function(q){
 
-          div.innerHTML = '&shy;<style media=\"' + q + '\"> #mq-test-1 { width: 42px; }</style>';
+          div.innerHTML = "&shy;<style media=\"" + q + "\"> #mq-test-1 { width: 42px; }</style>";
 
           docElem.insertBefore( fakeBody, refNode );
           bool = div.offsetWidth === 42;
@@ -1254,7 +1215,7 @@
 
   (function( $, undefined ) {
     var support = {
-      touch: 'ontouchend' in document
+      touch: "ontouchend" in document
     };
 
     $.extend( $.support, support );
@@ -1262,7 +1223,7 @@
 
   (function( $, undefined ) {
     $.extend( $.support, {
-      orientation: 'orientation' in window && 'onorientationchange' in window
+      orientation: "orientation" in window && "onorientationchange" in window
     });
   }( jQuery ));
 
@@ -1271,7 +1232,7 @@
     // thx Modernizr
     function propExists( prop ) {
       var uc_prop = prop.charAt( 0 ).toUpperCase() + prop.substr( 1 ),
-        props = ( prop + ' ' + vendors.join( uc_prop + ' ' ) + uc_prop ).split( ' ' ),
+        props = ( prop + " " + vendors.join( uc_prop + " " ) + uc_prop ).split( " " ),
         v;
 
       for ( v in props ) {
@@ -1281,55 +1242,55 @@
       }
     }
 
-    var fakeBody = $( '<body>' ).prependTo( 'html' ),
+    var fakeBody = $( "<body>" ).prependTo( "html" ),
       fbCSS = fakeBody[ 0 ].style,
-      vendors = [ 'Webkit', 'Moz', 'O' ],
-      webos = 'palmGetResource' in window;
+      vendors = [ "Webkit", "Moz", "O" ],
+      webos = "palmGetResource" in window;
 
 
     function transform3dTest() {
-      var mqProp = 'transform-3d',
+      var mqProp = "transform-3d",
       // Because the `translate3d` test below throws false positives in Android:
-        ret = $.outback.media( '(-' + vendors.join( '-' + mqProp + '),(-' ) + '-' + mqProp + '),(' + mqProp + ')' ),
+        ret = $.outback.media( "(-" + vendors.join( "-" + mqProp + "),(-" ) + "-" + mqProp + "),(" + mqProp + ")" ),
         el, transforms, t;
 
       if ( ret ) {
         return !!ret;
       }
 
-      el = document.createElement( 'div' );
+      el = document.createElement( "div" );
       transforms = {
         // We’re omitting Opera for the time being; MS uses unprefixed.
-        'MozTransform': '-moz-transform',
-        'transform': 'transform'
+        "MozTransform": "-moz-transform",
+        "transform": "transform"
       };
 
       fakeBody.append( el );
 
       for ( t in transforms ) {
         if ( el.style[ t ] !== undefined ) {
-          el.style[ t ] = 'translate3d( 100px, 1px, 1px )';
+          el.style[ t ] = "translate3d( 100px, 1px, 1px )";
           ret = window.getComputedStyle( el ).getPropertyValue( transforms[ t ] );
         }
       }
-      return ( !!ret && ret !== 'none' );
+      return ( !!ret && ret !== "none" );
     }
 
     // Test for dynamic-updating base tag support ( allows us to avoid href,src attr rewriting )
     function baseTagTest() {
-      var fauxBase = location.protocol + "//" + location.host + location.pathname + 'ui-dir/',
-        base = $( 'head base' ),
+      var fauxBase = location.protocol + "//" + location.host + location.pathname + "ui-dir/",
+        base = $( "head base" ),
         fauxEle = null,
-        href = '',
+        href = "",
         link, rebase;
 
       if ( !base.length ) {
-        base = fauxEle = $( '<base>', { 'href': fauxBase }).appendTo( 'head' );
+        base = fauxEle = $( "<base>", { "href": fauxBase }).appendTo( "head" );
       } else {
-        href = base.attr( 'href' );
+        href = base.attr( "href" );
       }
 
-      link = $( '<a href="testurl" />' ).prependTo( fakeBody );
+      link = $( "<a href='testurl' />" ).prependTo( fakeBody );
       rebase = link[ 0 ].href;
       base[ 0 ].href = href || location.pathname;
 
@@ -1353,9 +1314,9 @@
 
       if (
         // iOS 4.3 and older : Platform is iPhone/Pad/Touch and Webkit version is less than 534 (ios5)
-      ( ( platform.indexOf( 'iPhone' ) > -1 || platform.indexOf( 'iPad' ) > -1  || platform.indexOf( 'iPod' ) > -1 ) && wkversion && wkversion < 534 ) ||
+      ( ( platform.indexOf( "iPhone" ) > -1 || platform.indexOf( "iPad" ) > -1  || platform.indexOf( "iPod" ) > -1 ) && wkversion && wkversion < 534 ) ||
         //Android lte 2.1: Platform is Android and Webkit version is less than 533 (Android 2.2)
-      ( ua.indexOf( 'Android' ) > -1 && wkversion && wkversion < 533 ) ) {
+      ( ua.indexOf( "Android" ) > -1 && wkversion && wkversion < 533 ) ) {
         return false;
       }
 
@@ -1367,22 +1328,28 @@
       // We've chosen to take the shortest path to a bug fix here for issue #5426
       // See the following link for information about the regex chosen
       // https://developers.google.com/chrome/mobile/docs/user-agent#chrome_for_ios_user-agent
-      pushState: 'pushState' in history &&
-      'replaceState' in history &&
+      pushState: "pushState" in history &&
+      "replaceState" in history &&
         // When running inside a FF iframe, calling replaceState causes an error
-      !( window.navigator.userAgent.indexOf( 'Firefox' ) >= 0 && window.top !== window ) &&
+      !( window.navigator.userAgent.indexOf( "Firefox" ) >= 0 && window.top !== window ) &&
       ( window.navigator.userAgent.search(/CriOS/) === -1 ),
-      touchOverflow: !!propExists( 'overflowScrolling' ),
+      touchOverflow: !!propExists( "overflowScrolling" ),
       cssTransform3d: transform3dTest(),
+      boxShadow: !!propExists( "boxShadow" ),
       fixedPosition: fixedPosition(),
-      scrollTop: ('pageXOffset' in window ||
-      'scrollTop' in document.documentElement ||
-      'scrollTop' in fakeBody[ 0 ]) && !webos,
+      scrollTop: ("pageXOffset" in window ||
+      "scrollTop" in document.documentElement ||
+      "scrollTop" in fakeBody[ 0 ]) && !webos,
 
       dynamicBaseTag: baseTagTest()
     });
 
     fakeBody.remove();
+
+    // For ruling out shadows via css
+    if ( !$.support.boxShadow ) {
+      $( "html" ).addClass( "ui-noboxshadow" );
+    }
 
   })( jQuery );
 
@@ -1391,10 +1358,10 @@
   (function( $ ) {
     $.event.special.throttledresize = {
       setup: function() {
-        $( this ).bind( 'resize', handler );
+        $( this ).bind( "resize", handler );
       },
       teardown: function() {
-        $( this ).unbind( 'resize', handler );
+        $( this ).unbind( "resize", handler );
       }
     };
 
@@ -1406,7 +1373,7 @@
         if ( diff >= throttle ) {
 
           lastCall = curr;
-          $( this ).trigger( 'throttledresize' );
+          $( this ).trigger( "throttledresize" );
 
         } else {
 
@@ -1427,18 +1394,18 @@
 
   (function( $, window ) {
     var win = $( window ),
-      event_name = 'orientationchange',
+      event_name = "orientationchange",
       get_orientation,
       last_orientation,
       initial_orientation_is_landscape,
       initial_orientation_is_default,
-      portrait_map = { '0': true, '180': true },
+      portrait_map = { "0": true, "180": true },
       ww, wh, landscape_threshold;
 
     // It seems that some device/browser vendors use window.orientation values 0 and 180 to
-    // denote the 'default' orientation. For iOS devices, and most other smart-phones tested,
-    // the default orientation is always 'portrait', but in some Android and RIM based tablets,
-    // the default orientation is 'landscape'. The following code attempts to use the window
+    // denote the "default" orientation. For iOS devices, and most other smart-phones tested,
+    // the default orientation is always "portrait", but in some Android and RIM based tablets,
+    // the default orientation is "landscape". The following code attempts to use the window
     // dimensions to figure out what the current orientation is, and then makes adjustments
     // to the to the portrait_map if necessary, so that we can properly decode the
     // window.orientation value whenever get_orientation() is called.
@@ -1477,7 +1444,7 @@
       // need to flip our portrait_map values because landscape is the default orientation for
       // this device/browser.
       if ( ( initial_orientation_is_landscape && initial_orientation_is_default ) || ( !initial_orientation_is_landscape && !initial_orientation_is_default ) ) {
-        portrait_map = { '-90': true, '90': true };
+        portrait_map = { "-90": true, "90": true };
       }
     }
 
@@ -1494,7 +1461,7 @@
 
         // Because the orientationchange event doesn't exist, simulate the
         // event by testing window dimensions on resize.
-        win.bind( 'throttledresize', handler );
+        win.bind( "throttledresize", handler );
       },
       teardown: function() {
         // If the event is not supported natively, return false so that
@@ -1505,7 +1472,7 @@
 
         // Because the orientationchange event doesn't exist, unbind the
         // resize event handler.
-        win.unbind( 'throttledresize', handler );
+        win.unbind( "throttledresize", handler );
       },
       add: function( handleObj ) {
         // Save a reference to the bound event handler.
@@ -1552,7 +1519,7 @@
         isPortrait = elem && elem.clientWidth / elem.clientHeight < 1.1;
       }
 
-      return isPortrait ? 'portrait' : 'landscape';
+      return isPortrait ? "portrait" : "landscape";
     };
 
     $.fn[ event_name ] = function( fn ) {
@@ -1580,14 +1547,14 @@
 // on the same element for different events.
 //
 // The current version exposes the following virtual events to jQuery bind methods:
-// 'vmouseover vmousedown vmousemove vmouseup vclick vmouseout vmousecancel'
+// "vmouseover vmousedown vmousemove vmouseup vclick vmouseout vmousecancel"
 
   (function( $, window, document, undefined ) {
 
-    var dataPropertyName = 'virtualMouseBindings',
-      touchTargetPropertyName = 'virtualTouchID',
-      virtualEventNames = 'vmouseover vmousedown vmousemove vmouseup vclick vmouseout vmousecancel'.split( ' ' ),
-      touchEventProps = 'clientX clientY pageX pageY screenX screenY'.split( ' ' ),
+    var dataPropertyName = "virtualMouseBindings",
+      touchTargetPropertyName = "virtualTouchID",
+      virtualEventNames = "vmouseover vmousedown vmousemove vmouseup vclick vmouseout vmousecancel".split( " " ),
+      touchEventProps = "clientX clientY pageX pageY screenX screenY".split( " " ),
       mouseHookProps = $.event.mouseHooks ? $.event.mouseHooks.props : [],
       mouseEventProps = $.event.props.concat( mouseHookProps ),
       activeDocHandlers = {},
@@ -1598,7 +1565,7 @@
       clickBlockList = [],
       blockMouseTriggers = false,
       blockTouchTriggers = false,
-      eventCaptureSupported = 'addEventListener' in document,
+      eventCaptureSupported = "addEventListener" in document,
       $document = $( document ),
       nextTouchID = 1,
       lastTouchID = 0, threshold,
@@ -1612,7 +1579,7 @@
 
     function getNativeEvent( event ) {
 
-      while ( event && typeof event.originalEvent !== 'undefined' ) {
+      while ( event && typeof event.originalEvent !== "undefined" ) {
         event = event.originalEvent;
       }
       return event;
@@ -1759,7 +1726,7 @@
         ve;
 
       if ( !blockMouseTriggers && ( !lastTouchID || lastTouchID !== touchID ) ) {
-        ve = triggerVirtualEvent( 'v' + event.type, event );
+        ve = triggerVirtualEvent( "v" + event.type, event );
         if ( ve ) {
           if ( ve.isDefaultPrevented() ) {
             event.preventDefault();
@@ -1798,8 +1765,8 @@
           startX = t.pageX;
           startY = t.pageY;
 
-          triggerVirtualEvent( 'vmouseover', event, flags );
-          triggerVirtualEvent( 'vmousedown', event, flags );
+          triggerVirtualEvent( "vmouseover", event, flags );
+          triggerVirtualEvent( "vmousedown", event, flags );
         }
       }
     }
@@ -1810,7 +1777,7 @@
       }
 
       if ( !didScroll ) {
-        triggerVirtualEvent( 'vmousecancel', event, getVirtualBindingFlags( event.target ) );
+        triggerVirtualEvent( "vmousecancel", event, getVirtualBindingFlags( event.target ) );
       }
 
       didScroll = true;
@@ -1832,10 +1799,10 @@
         Math.abs( t.pageY - startY ) > moveThreshold );
 
       if ( didScroll && !didCancel ) {
-        triggerVirtualEvent( 'vmousecancel', event, flags );
+        triggerVirtualEvent( "vmousecancel", event, flags );
       }
 
-      triggerVirtualEvent( 'vmousemove', event, flags );
+      triggerVirtualEvent( "vmousemove", event, flags );
       startResetTimer();
     }
 
@@ -1848,10 +1815,10 @@
 
       var flags = getVirtualBindingFlags( event.target ),
         ve, t;
-      triggerVirtualEvent( 'vmouseup', event, flags );
+      triggerVirtualEvent( "vmouseup", event, flags );
 
       if ( !didScroll ) {
-        ve = triggerVirtualEvent( 'vclick', event, flags );
+        ve = triggerVirtualEvent( "vclick", event, flags );
         if ( ve && ve.isDefaultPrevented() ) {
           // The target of the mouse events that follow the touchend
           // event don't necessarily match the target used during the
@@ -1869,7 +1836,7 @@
           blockMouseTriggers = true;
         }
       }
-      triggerVirtualEvent( 'vmouseout', event, flags);
+      triggerVirtualEvent( "vmouseout", event, flags);
       didScroll = false;
 
       startResetTimer();
@@ -1928,11 +1895,11 @@
             // If this is the first virtual mouse binding for the document,
             // register our touchstart handler on the document.
 
-            activeDocHandlers[ 'touchstart' ] = ( activeDocHandlers[ 'touchstart' ] || 0) + 1;
+            activeDocHandlers[ "touchstart" ] = ( activeDocHandlers[ "touchstart" ] || 0) + 1;
 
-            if ( activeDocHandlers[ 'touchstart' ] === 1 ) {
-              $document.bind( 'touchstart', handleTouchStart )
-                .bind( 'touchend', handleTouchEnd )
+            if ( activeDocHandlers[ "touchstart" ] === 1 ) {
+              $document.bind( "touchstart", handleTouchStart )
+                .bind( "touchend", handleTouchEnd )
 
                 // On touch platforms, touching the screen and then dragging your finger
                 // causes the window content to scroll after some distance threshold is
@@ -1944,8 +1911,8 @@
                 // we need to watch both scroll and touchmove events to figure out whether
                 // or not a scroll happenens before the touchend event is fired.
 
-                .bind( 'touchmove', handleTouchMove )
-                .bind( 'scroll', handleScroll );
+                .bind( "touchmove", handleTouchMove )
+                .bind( "scroll", handleScroll );
             }
           }
         },
@@ -1964,13 +1931,13 @@
             // If this is the last virtual mouse binding in existence,
             // remove our document touchstart listener.
 
-            --activeDocHandlers[ 'touchstart' ];
+            --activeDocHandlers[ "touchstart" ];
 
-            if ( !activeDocHandlers[ 'touchstart' ] ) {
-              $document.unbind( 'touchstart', handleTouchStart )
-                .unbind( 'touchmove', handleTouchMove )
-                .unbind( 'touchend', handleTouchEnd )
-                .unbind( 'scroll', handleScroll );
+            if ( !activeDocHandlers[ "touchstart" ] ) {
+              $document.unbind( "touchstart", handleTouchStart )
+                .unbind( "touchmove", handleTouchMove )
+                .unbind( "touchend", handleTouchEnd )
+                .unbind( "scroll", handleScroll );
             }
           }
 
@@ -2010,7 +1977,7 @@
 // Note that we require event capture support for this so if the device
 // doesn't support it, we punt for now and rely solely on mouse events.
     if ( eventCaptureSupported ) {
-      document.addEventListener( 'click', function( e ) {
+      document.addEventListener( "click", function( e ) {
         var cnt = clickBlockList.length,
           target = e.target,
           x, y, ele, i, o, touchID;
@@ -2074,16 +2041,16 @@
   (function( $, window, undefined ) {
     var $document = $( document ),
       supportTouch = $.support.touch,
-      scrollEvent = 'touchmove scroll',
-      touchStartEvent = supportTouch ? 'touchstart' : 'mousedown',
-      touchStopEvent = supportTouch ? 'touchend' : 'mouseup',
-      touchMoveEvent = supportTouch ? 'touchmove' : 'mousemove';
+      scrollEvent = "touchmove scroll",
+      touchStartEvent = supportTouch ? "touchstart" : "mousedown",
+      touchStopEvent = supportTouch ? "touchend" : "mouseup",
+      touchMoveEvent = supportTouch ? "touchmove" : "mousemove";
 
     // setup new event shortcuts
-    $.each( ( 'touchstart touchmove touchend ' +
-    'tap taphold ' +
-    'swipe swipeleft swiperight ' +
-    'scrollstart scrollstop' ).split( ' ' ), function( i, name ) {
+    $.each( ( "touchstart touchmove touchend " +
+    "tap taphold " +
+    "swipe swipeleft swiperight " +
+    "scrollstart scrollstop" ).split( " " ), function( i, name ) {
 
       $.fn[ name ] = function( fn ) {
         return fn ? this.bind( name, fn ) : this.trigger( name );
@@ -2119,7 +2086,7 @@
 
         function trigger( event, state ) {
           scrolling = state;
-          triggerCustomEvent( thisObject, scrolling ? 'scrollstart' : 'scrollstop', event );
+          triggerCustomEvent( thisObject, scrolling ? "scrollstart" : "scrollstop", event );
         }
 
         // iPhone triggers scroll after a small delay; use touchmove instead
@@ -2153,7 +2120,7 @@
           $this = $( thisObject ),
           isTaphold = false;
 
-        $this.bind( 'vmousedown', function( event ) {
+        $this.bind( "vmousedown", function( event ) {
           isTaphold = false;
           if ( event.which && event.which !== 1 ) {
             return false;
@@ -2169,9 +2136,9 @@
           function clearTapHandlers() {
             clearTapTimer();
 
-            $this.unbind( 'vclick', clickHandler )
-              .unbind( 'vmouseup', clearTapTimer );
-            $document.unbind( 'vmousecancel', clearTapHandlers );
+            $this.unbind( "vclick", clickHandler )
+              .unbind( "vmouseup", clearTapTimer );
+            $document.unbind( "vmousecancel", clearTapHandlers );
           }
 
           function clickHandler( event ) {
@@ -2180,27 +2147,27 @@
             // ONLY trigger a 'tap' event if the start target is
             // the same as the stop target.
             if ( !isTaphold && origTarget === event.target ) {
-              triggerCustomEvent( thisObject, 'tap', event );
+              triggerCustomEvent( thisObject, "tap", event );
             } else if ( isTaphold ) {
               event.preventDefault();
             }
           }
 
-          $this.bind( 'vmouseup', clearTapTimer )
-            .bind( 'vclick', clickHandler );
-          $document.bind( 'vmousecancel', clearTapHandlers );
+          $this.bind( "vmouseup", clearTapTimer )
+            .bind( "vclick", clickHandler );
+          $document.bind( "vmousecancel", clearTapHandlers );
 
           timer = setTimeout( function() {
             if ( !$.event.special.tap.emitTapOnTaphold ) {
               isTaphold = true;
             }
-            triggerCustomEvent( thisObject, 'taphold', $.Event( 'taphold', { target: origTarget } ) );
+            triggerCustomEvent( thisObject, "taphold", $.Event( "taphold", { target: origTarget } ) );
           }, $.event.special.tap.tapholdThreshold );
         });
       },
       teardown: function() {
-        $( this ).unbind( 'vmousedown' ).unbind( 'vclick' ).unbind( 'vmouseup' );
-        $document.unbind( 'vmousecancel' );
+        $( this ).unbind( "vmousedown" ).unbind( "vclick" ).unbind( "vmouseup" );
+        $document.unbind( "vmousecancel" );
       }
     };
 
@@ -2211,7 +2178,7 @@
       scrollSupressionThreshold: 30,
 
       // More time than this, and it isn't a swipe.
-      durationThreshold: 100,
+      durationThreshold: 1000,
 
       // Swipe horizontal displacement must be more than this.
       horizontalDistanceThreshold: 30,
@@ -2272,9 +2239,9 @@
         if ( stop.time - start.time < $.event.special.swipe.durationThreshold &&
           Math.abs( start.coords[ 0 ] - stop.coords[ 0 ] ) > $.event.special.swipe.horizontalDistanceThreshold &&
           Math.abs( start.coords[ 1 ] - stop.coords[ 1 ] ) < $.event.special.swipe.verticalDistanceThreshold ) {
-          var direction = start.coords[0] > stop.coords[ 0 ] ? 'swipeleft' : 'swiperight';
+          var direction = start.coords[0] > stop.coords[ 0 ] ? "swipeleft" : "swiperight";
 
-          triggerCustomEvent( thisObject, 'swipe', $.Event( 'swipe', { target: origTarget, swipestart: start, swipestop: stop }), true );
+          triggerCustomEvent( thisObject, "swipe", $.Event( "swipe", { target: origTarget, swipestart: start, swipestop: stop }), true );
           triggerCustomEvent( thisObject, direction,$.Event( direction, { target: origTarget, swipestart: start, swipestop: stop } ), true );
           return true;
         }
@@ -2293,22 +2260,16 @@
           context = {};
 
         // Retrieve the events data for this element and add the swipe context
-        events = $.data( this, 'outback-events' );
+        events = $.data( this, "outback-events" );
         if ( !events ) {
           events = { length: 0 };
-          $.data( this, 'outback-events', events );
+          $.data( this, "outback-events", events );
         }
         events.length++;
         events.swipe = context;
 
         context.start = function( event ) {
-          if(event.target.nodeName == 'svg') {
-              return;
-          } 
-          if(event.target.type == 'range') {
-            return;
-          }
-          
+
           // Bail if we're already working on a swipe event
           if ( $.event.special.swipe.eventInProgress ) {
             return;
@@ -2358,13 +2319,13 @@
       teardown: function() {
         var events, context;
 
-        events = $.data( this, 'outback-events' );
+        events = $.data( this, "outback-events" );
         if ( events ) {
           context = events.swipe;
           delete events.swipe;
           events.length--;
           if ( events.length === 0 ) {
-            $.removeData( this, 'outback-events' );
+            $.removeData( this, "outback-events" );
           }
         }
 
@@ -2382,10 +2343,10 @@
       }
     };
     $.each({
-      scrollstop: 'scrollstart',
-      taphold: 'tap',
-      swipeleft: 'swipe.left',
-      swiperight: 'swipe.right'
+      scrollstop: "scrollstart",
+      taphold: "tap",
+      swipeleft: "swipe.left",
+      swiperight: "swipe.right"
     }, function( event, sourceEvent ) {
 
       $.event.special[ event ] = {
@@ -2402,39 +2363,39 @@
 
   (function( $, undefined ) {
     var props = {
-        'animation': {},
-        'transition': {}
+        "animation": {},
+        "transition": {}
       },
-      testElement = document.createElement( 'a' ),
-      vendorPrefixes = [ '', 'webkit-', 'moz-', 'o-' ];
+      testElement = document.createElement( "a" ),
+      vendorPrefixes = [ "", "webkit-", "moz-", "o-" ];
 
-    $.each( [ 'animation', 'transition' ], function( i, test ) {
+    $.each( [ "animation", "transition" ], function( i, test ) {
 
       // Get correct name for test
-      var testName = ( i === 0 ) ? test + '-' + 'name' : test;
+      var testName = ( i === 0 ) ? test + "-" + "name" : test;
 
       $.each( vendorPrefixes, function( j, prefix ) {
         if ( testElement.style[ $.camelCase( prefix + testName ) ] !== undefined ) {
-          props[ test ][ 'prefix' ] = prefix;
+          props[ test ][ "prefix" ] = prefix;
           return false;
         }
       });
 
       // Set event and duration names for later use
-      props[ test ][ 'duration' ] =
-        $.camelCase( props[ test ][ 'prefix' ] + test + '-' + 'duration' );
-      props[ test ][ 'event' ] =
-        $.camelCase( props[ test ][ 'prefix' ] + test + '-' + 'end' );
+      props[ test ][ "duration" ] =
+        $.camelCase( props[ test ][ "prefix" ] + test + "-" + "duration" );
+      props[ test ][ "event" ] =
+        $.camelCase( props[ test ][ "prefix" ] + test + "-" + "end" );
 
       // All lower case if not a vendor prop
-      if ( props[ test ][ 'prefix' ] === '' ) {
-        props[ test ][ 'event' ] = props[ test ][ 'event' ].toLowerCase();
+      if ( props[ test ][ "prefix" ] === "" ) {
+        props[ test ][ "event" ] = props[ test ][ "event" ].toLowerCase();
       }
     });
 
     // If a valid prefix was found then the it is supported by the browser
-    $.support.cssTransitions = ( props[ 'transition' ][ 'prefix' ] !== undefined );
-    $.support.cssAnimations = ( props[ 'animation' ][ 'prefix' ] !== undefined );
+    $.support.cssTransitions = ( props[ "transition" ][ "prefix" ] !== undefined );
+    $.support.cssAnimations = ( props[ "animation" ][ "prefix" ] !== undefined );
 
     // Remove the testElement
     $( testElement ).remove();
@@ -2449,11 +2410,11 @@
           clearTimeout( timer );
           callback.apply( this, arguments );
         },
-        animationType = ( !type || type === 'animation' ) ? 'animation' : 'transition';
+        animationType = ( !type || type === "animation" ) ? "animation" : "transition";
 
       // Make sure selected type is supported by browser
-      if ( ( $.support.cssTransitions && animationType === 'transition' ) ||
-        ( $.support.cssAnimations && animationType === 'animation' ) ) {
+      if ( ( $.support.cssTransitions && animationType === "transition" ) ||
+        ( $.support.cssAnimations && animationType === "animation" ) ) {
 
         // If a fallback time was not passed set one
         if ( fallbackTime === undefined ) {
@@ -2513,7 +2474,7 @@
     $.cleanData = function( elems ) {
       for ( var i = 0, elem; (elem = elems[i]) != null; i++ ) {
         try {
-          $( elem ).triggerHandler( 'remove' );
+          $( elem ).triggerHandler( "remove" );
           // http://bugs.jquery.com/ticket/8235
         } catch( e ) {}
       }
@@ -2525,10 +2486,10 @@
       // proxiedPrototype allows the provided prototype to remain unmodified
       // so that it can be used as a mixin for multiple widgets (#8876)
         proxiedPrototype = {},
-        namespace = name.split( '.' )[ 0 ];
+        namespace = name.split( "." )[ 0 ];
 
-      name = name.split( '.' )[ 1 ];
-      fullName = namespace + '-' + name;
+      name = name.split( "." )[ 1 ];
+      fullName = namespace + "-" + name;
 
       if ( !prototype ) {
         prototype = base;
@@ -2536,7 +2497,7 @@
       }
 
       // create selector for plugin
-      $.expr[ ':' ][ fullName.toLowerCase() ] = function( elem ) {
+      $.expr[ ":" ][ fullName.toLowerCase() ] = function( elem ) {
         return !!$.data( elem, fullName );
       };
 
@@ -2621,7 +2582,7 @@
 
           // redefine the child widget using the same prototype that was
           // originally used, but inherit from the new version of the base
-          $.widget( childPrototype.namespace + '.' + childPrototype.widgetName, constructor, child._proto );
+          $.widget( childPrototype.namespace + "." + childPrototype.widgetName, constructor, child._proto );
         });
         // remove the list of existing child constructors from the old constructor
         // so the old child constructors can be garbage collected
@@ -2664,7 +2625,7 @@
     $.widget.bridge = function( name, object ) {
       var fullName = object.prototype.widgetFullName || name;
       $.fn[ name ] = function( options ) {
-        var isMethodCall = typeof options === 'string',
+        var isMethodCall = typeof options === "string",
           args = slice.call( arguments, 1 ),
           returnValue = this;
 
@@ -2677,16 +2638,16 @@
           this.each(function() {
             var methodValue,
               instance = $.data( this, fullName );
-            if ( options === 'instance' ) {
+            if ( options === "instance" ) {
               returnValue = instance;
               return false;
             }
             if ( !instance ) {
-              return $.error( 'cannot call methods on ' + name + ' prior to initialization; ' +
-                'attempted to call method "' + options + '"' );
+              return $.error( "cannot call methods on " + name + " prior to initialization; " +
+                "attempted to call method '" + options + "'" );
             }
-            if ( !$.isFunction( instance[options] ) || options.charAt( 0 ) === '_' ) {
-              return $.error( 'no such method "' + options + '" for ' + name + ' widget instance' );
+            if ( !$.isFunction( instance[options] ) || options.charAt( 0 ) === "_" ) {
+              return $.error( "no such method '" + options + "' for " + name + " widget instance" );
             }
             methodValue = instance[ options ].apply( instance, args );
             if ( methodValue !== instance && methodValue !== undefined ) {
@@ -2715,9 +2676,9 @@
     $.Widget._childConstructors = [];
 
     $.Widget.prototype = {
-      widgetName: 'widget',
-      widgetEventPrefix: '',
-      defaultElement: '<div>',
+      widgetName: "widget",
+      widgetEventPrefix: "",
+      defaultElement: "<div>",
       options: {
         disabled: false,
 
@@ -2728,7 +2689,7 @@
         element = $( element || this.defaultElement || this )[ 0 ];
         this.element = $( element );
         this.uuid = uuid++;
-        this.eventNamespace = '.' + this.widgetName + this.uuid;
+        this.eventNamespace = "." + this.widgetName + this.uuid;
         this.options = $.widget.extend( {},
           this.options,
           this._getCreateOptions(),
@@ -2756,7 +2717,7 @@
         }
 
         this._create();
-        this._trigger( 'create', null, this._getCreateEventData() );
+        this._trigger( "create", null, this._getCreateEventData() );
         this._init();
       },
       _getCreateOptions: $.noop,
@@ -2776,15 +2737,15 @@
           .removeData( $.camelCase( this.widgetFullName ) );
         this.widget()
           .unbind( this.eventNamespace )
-          .removeAttr( 'aria-disabled' )
+          .removeAttr( "aria-disabled" )
           .removeClass(
-            this.widgetFullName + '-disabled ' +
-            'ob-state-disabled' );
+            this.widgetFullName + "-disabled " +
+            "ui-state-disabled" );
 
         // clean up events and states
         this.bindings.unbind( this.eventNamespace );
-        this.hoverable.removeClass( 'ob-state-hover' );
-        this.focusable.removeClass( 'ob-state-focus' );
+        this.hoverable.removeClass( "ui-state-hover" );
+        this.focusable.removeClass( "ui-state-focus" );
       },
       _destroy: $.noop,
 
@@ -2803,10 +2764,10 @@
           return $.widget.extend( {}, this.options );
         }
 
-        if ( typeof key === 'string' ) {
+        if ( typeof key === "string" ) {
           // handle nested keys, e.g., "foo.bar" => { foo: { bar: ___ } }
           options = {};
-          parts = key.split( '.' );
+          parts = key.split( "." );
           key = parts.shift();
           if ( parts.length ) {
             curOption = options[ key ] = $.widget.extend( {}, this.options[ key ] );
@@ -2843,11 +2804,11 @@
       _setOption: function( key, value ) {
         this.options[ key ] = value;
 
-        if ( key === 'disabled' ) {
+        if ( key === "disabled" ) {
           this.widget()
-            .toggleClass( this.widgetFullName + '-disabled', !!value );
-          this.hoverable.removeClass( 'ob-state-hover' );
-          this.focusable.removeClass( 'ob-state-focus' );
+            .toggleClass( this.widgetFullName + "-disabled", !!value );
+          this.hoverable.removeClass( "ui-state-hover" );
+          this.focusable.removeClass( "ui-state-focus" );
         }
 
         return this;
@@ -2865,7 +2826,7 @@
           instance = this;
 
         // no suppressDisabledCheck flag, shuffle arguments
-        if ( typeof suppressDisabledCheck !== 'boolean' ) {
+        if ( typeof suppressDisabledCheck !== "boolean" ) {
           handlers = element;
           element = suppressDisabledCheck;
           suppressDisabledCheck = false;
@@ -2889,20 +2850,15 @@
             // - disabled class as method for disabling individual parts
             if ( !suppressDisabledCheck &&
               ( instance.options.disabled === true ||
-              $( this ).hasClass( 'ob-state-disabled' ) ) ) {
+              $( this ).hasClass( "ui-state-disabled" ) ) ) {
               return;
             }
-            
-            var _handler = ( typeof handler === 'string' ? instance[ handler ] : handler );
-            if(_handler) {
-                return _handler.apply( instance, arguments );
-            }
-            
-            console.error('호출할 method가 정의되어 있지 않습니다.' + handler);
+            return ( typeof handler === "string" ? instance[ handler ] : handler )
+              .apply( instance, arguments );
           }
 
           // copy the guid so direct unbinding works
-          if ( typeof handler !== 'string' ) {
+          if ( typeof handler !== "string" ) {
             handlerProxy.guid = handler.guid =
               handler.guid || handlerProxy.guid || $.guid++;
           }
@@ -2919,7 +2875,7 @@
       },
 
       _off: function( element, eventName ) {
-        eventName = (eventName || '').split( ' ' ).join( this.eventNamespace + ' ' ) + this.eventNamespace;
+        eventName = (eventName || "").split( " " ).join( this.eventNamespace + " " ) + this.eventNamespace;
         element.unbind( eventName ).undelegate( eventName );
 
         // Clear the stack to avoid memory leaks (#10056)
@@ -2930,7 +2886,7 @@
 
       _delay: function( handler, delay ) {
         function handlerProxy() {
-          return ( typeof handler === 'string' ? instance[ handler ] : handler )
+          return ( typeof handler === "string" ? instance[ handler ] : handler )
             .apply( instance, arguments );
         }
         var instance = this;
@@ -2941,10 +2897,10 @@
         this.hoverable = this.hoverable.add( element );
         this._on( element, {
           mouseenter: function( event ) {
-            $( event.currentTarget ).addClass( 'ob-state-hover' );
+            $( event.currentTarget ).addClass( "ui-state-hover" );
           },
           mouseleave: function( event ) {
-            $( event.currentTarget ).removeClass( 'ob-state-hover' );
+            $( event.currentTarget ).removeClass( "ui-state-hover" );
           }
         });
       },
@@ -2953,10 +2909,10 @@
         this.focusable = this.focusable.add( element );
         this._on( element, {
           focusin: function( event ) {
-            $( event.currentTarget ).addClass( 'ob-state-focus' );
+            $( event.currentTarget ).addClass( "ui-state-focus" );
           },
           focusout: function( event ) {
-            $( event.currentTarget ).removeClass( 'ob-state-focus' );
+            $( event.currentTarget ).removeClass( "ui-state-focus" );
           }
         });
       },
@@ -2988,26 +2944,22 @@
         return !( $.isFunction( callback ) &&
         callback.apply( this.element[0], [ event ].concat( data ) ) === false ||
         event.isDefaultPrevented() );
-      },
-      
-      $: function(selector) {
-          return this.element.find(selector);
       }
     };
 
-    $.each( { show: 'fadeIn', hide: 'fadeOut' }, function( method, defaultEffect ) {
-      $.Widget.prototype[ '_' + method ] = function( element, options, callback ) {
-        if ( typeof options === 'string' ) {
+    $.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEffect ) {
+      $.Widget.prototype[ "_" + method ] = function( element, options, callback ) {
+        if ( typeof options === "string" ) {
           options = { effect: options };
         }
         var hasOptions,
           effectName = !options ?
             method :
-            options === true || typeof options === 'number' ?
+            options === true || typeof options === "number" ?
               defaultEffect :
             options.effect || defaultEffect;
         options = options || {};
-        if ( typeof options === 'number' ) {
+        if ( typeof options === "number" ) {
           options = { duration: options };
         }
         hasOptions = !$.isEmptyObject( options );
@@ -3037,7 +2989,7 @@
 
     var rcapitals = /[A-Z]/g,
       replaceFunction = function( c ) {
-        return '-' + c.toLowerCase();
+        return "-" + c.toLowerCase();
       };
 
     $.extend( $.Widget.prototype, {
@@ -3047,7 +2999,7 @@
           options = {};
 
         //
-        if ( !$.outback.getAttribute( elem, 'defaults' ) ) {
+        if ( !$.outback.getAttribute( elem, "defaults" ) ) {
           for ( option in this.options ) {
             value = $.outback.getAttribute( elem, option.replace( rcapitals, replaceFunction ) );
 
@@ -3074,7 +3026,7 @@
           name = constructor.prototype.widgetName;
 
         constructor.initSelector = ( ( constructor.prototype.initSelector !== undefined ) ?
-          constructor.prototype.initSelector : '[data-role="' + name + '"]' );
+          constructor.prototype.initSelector : "[data-role='" + name + "']" );
 
         $.outback.widgets[ name ] = constructor;
 
@@ -3082,15 +3034,20 @@
       };
     })( $.widget );
 
-    // Make sure $.widget still has bridge and extend methods
+// Make sure $.widget still has bridge and extend methods
     $.extend( $.widget, originalWidget );
+
+// For backcompat remove in 1.5
+    $.outback.document.on( "create", function( event ) {
+      $( event.target ).enhanceWithin();
+    });
 
     /**
      * basePage Widget
      */
-    $.widget( 'outback.basePage', {
+    $.widget( "outback.basePage", {
       options: {
-        theme: 'a',
+        theme: "a",
         enhanced: false,
         renderingOninitpage: false,
         pageAnimation: true
@@ -3099,7 +3056,7 @@
       _create: function() {
         var self = this;
         // If false is returned by the callbacks do not create the page
-        if ( this._trigger( 'beforecreate' ) === false ) {
+        if ( this._trigger( "beforecreate" ) === false ) {
           return false;
         }
 
@@ -3107,12 +3064,12 @@
           self.onInitPage.call(self);
 
           // page가 보이게 한다.
-          $('html').removeClass( 'ob-rendering' );
+          $("html").removeClass( "ui-mobile-rendering" );
         };
 
         window.onHistoryBackPage = function() {
           // popup이 떠있는 상태에서 Android의 하드웨어 이전버튼을 누를 경우 팝업을 닫는다.
-          var $popup = $('.ob-popup-active');
+          var $popup = $('.ui-popup-active');
           if($popup.length) {
             $popup.popup('close');
             return;
@@ -3134,21 +3091,30 @@
       },
 
       _enhance: function () {
-        var attrPrefix = 'data-',
+        var attrPrefix = "data-",
           self = this;
 
         if ( this.options.role ) {
-          this.element.attr( attrPrefix + 'role', this.options.role );
+          this.element.attr( attrPrefix + "role", this.options.role );
         }
 
         this.element
-          .attr( 'tabindex', '0' )
-          .addClass( 'ob-page ob-page-theme-' + this.options.theme );
+          .attr( "tabindex", "0" )
+          .addClass( "ui-page ui-page-theme-" + this.options.theme );
+
+        // Manipulation of content os Deprecated as of 1.4 remove in 1.5
+        this.element.find( "[" + attrPrefix + "role='content']" ).each( function() {
+          var $this = $( this ),
+            theme = this.getAttribute( attrPrefix + "theme" ) || undefined;
+          $this.addClass( "ui-content" );
+          // Add ARIA role
+          $this.attr( "role", "main" ).addClass( "ui-content" );
+        });
       },
 
       _setOptions: function( o ) {
         if ( o.theme !== undefined ) {
-          this.element.removeClass( 'ob-page-theme-' + this.options.theme ).addClass( 'ob-page-theme-' + o.theme );
+          this.element.removeClass( "ui-page-theme-" + this.options.theme ).addClass( "ui-page-theme-" + o.theme );
         }
       },
 
@@ -3176,43 +3142,46 @@
    */
   (function( $ ) {
     // TODO move loader class down into the widget settings
-    var loaderClass = 'ob-loader', $html = $( 'html' );
+    var loaderClass = "ui-loader", $html = $( "html" );
 
-    $.widget( 'outback.loader', {
+    $.widget( "outback.loader", {
       // NOTE if the global config settings are defined they will override these
       //    options
       options: {
         // the theme for the loading message
-        theme: 'a',
+        theme: "a",
 
         // whether the text in the loading message is shown
         textVisible: false,
 
         // custom html for the inner content of the loading message
-        html: '',
+        html: "",
 
         // the text to be displayed when the popup is shown
-        text: 'loading'
+        text: "loading"
       },
 
       _create: function() {
         this.count = 0;
       },
 
-      defaultHtml: '<div class="' + loaderClass + '">' +
-      '<span class="ob-icon-loading"></span>' +
-      '<h1></h1>' +
-      '</div>',
+      defaultHtml: "<div class='" + loaderClass + "'>" +
+      "<span class='ui-icon-loading'></span>" +
+      "<h1></h1>" +
+      "</div>",
 
       // For non-fixed supportin browsers. Position at y center (if scrollTop supported), above the activeBtn (if defined), or just 100px from top
       fakeFixLoader: function() {
+        var activeBtn = $( "." + $.outback.activeBtnClass ).first();
+
         this.element
           .css({
-            top: $.support.scrollTop && this.window.scrollTop() + this.window.height() / 2 || 100
+            top: $.support.scrollTop && this.window.scrollTop() + this.window.height() / 2 ||
+            activeBtn.length && activeBtn.offset().top || 100
           });
       },
 
-      // check position of loader to see if it appears to be 'fixed' to center
+      // check position of loader to see if it appears to be "fixed" to center
       // if not, use abs positioning
       checkLoaderPosition: function() {
         var offset = this.element.offset(),
@@ -3220,11 +3189,11 @@
           screenHeight = $.outback.getScreenHeight();
 
         if ( offset.top < scrollTop || ( offset.top - scrollTop ) > screenHeight ) {
-          this.element.addClass( 'ob-loader-fakefix' );
+          this.element.addClass( "ui-loader-fakefix" );
           this.fakeFixLoader();
           this.window
-            .unbind( 'scroll', this.checkLoaderPosition )
-            .bind( 'scroll', $.proxy( this.fakeFixLoader, this ) );
+            .unbind( "scroll", this.checkLoaderPosition )
+            .bind( "scroll", $.proxy( this.fakeFixLoader, this ) );
         }
       },
 
@@ -3240,7 +3209,7 @@
         var textVisible, message, loadSettings;
 
         this.count++;
-        if ( this.count > 1 ) {
+        if(this.count > 1) {
           return;
         }
 
@@ -3248,7 +3217,7 @@
 
         // use the prototype options so that people can set them globally at
         // mobile init. Consistency, it's what's for dinner
-        if ( $.type( theme ) === 'object' ) {
+        if ( $.type( theme ) === "object" ) {
           loadSettings = $.extend( {}, this.options, theme );
 
           theme = loadSettings.theme;
@@ -3263,19 +3232,19 @@
 
         // set the message text, prefer the param, then the settings object
         // then loading message
-        message = msgText || ( loadSettings.text === false ? '' : loadSettings.text );
+        message = msgText || ( loadSettings.text === false ? "" : loadSettings.text );
 
         // prepare the dom
-        $html.addClass( 'ob-loading' );
+        $html.addClass( "ui-loading" );
 
         textVisible = loadSettings.textVisible;
 
         // add the proper css given the options (theme, text, etc)
         // Force text visibility if the second argument was supplied, or
         // if the text was explicitly set in the object args
-        this.element.attr('class', loaderClass +
-          ' ob-loader-' + ( textVisible || msgText || theme.text ? 'verbose' : 'default' ) +
-          ( loadSettings.textonly || textonly ? ' ob-loader-textonly' : '' ) );
+        this.element.attr("class", loaderClass +
+          " ui-loader-" + ( textVisible || msgText || theme.text ? "verbose" : "default" ) +
+          ( loadSettings.textonly || textonly ? " ui-loader-textonly" : "" ) );
 
         // TODO verify that jquery.fn.html is ok to use in both cases here
         //    this might be overly defensive in preventing unknowing xss
@@ -3284,19 +3253,19 @@
         if ( loadSettings.html ) {
           this.element.html( loadSettings.html );
         } else {
-          this.element.find( 'h1' ).text( message );
+          this.element.find( "h1" ).text( message );
         }
 
         // attach the loader to the DOM
-        this.element.appendTo( $('body') );
+        this.element.appendTo( $("body") );
 
         // check that the loader is visible
         this.checkLoaderPosition();
 
         // on scroll check the loader position
-        this.window.bind( 'scroll', $.proxy( this.checkLoaderPosition, this ) );
+        this.window.bind( "scroll", $.proxy( this.checkLoaderPosition, this ) );
 
-        $('body').append('<div class="ob-loader-bg"></div>');
+        $('body').append('<div class="ui-loader-bg"></div>');
       },
 
       hide: function(all) {
@@ -3313,112 +3282,38 @@
           this.count = 0;
         }
 
-        $html.removeClass( 'ob-loading' );
+        $html.removeClass( "ui-loading" );
 
         if ( this.options.text ) {
-          this.element.removeClass( 'ob-loader-fakefix' );
+          this.element.removeClass( "ui-loader-fakefix" );
         }
 
-        $.outback.window.unbind( 'scroll', this.fakeFixLoader );
-        $.outback.window.unbind( 'scroll', this.checkLoaderPosition );
+        $.outback.window.unbind( "scroll", this.fakeFixLoader );
+        $.outback.window.unbind( "scroll", this.checkLoaderPosition );
 
-        $('.ob-loader-bg').remove();
+        $(".ui-loader-bg").remove();
       }
     });
+
   })(jQuery, this);
 
-  /**
-   * partialView Widget
-   */
-  (function( $, window, undefined ) {
-    $.widget( 'outback.partialView', {
-      options: {
-        theme: 'a',
-        enhanced: false,
-        renderingOninitpage: false,
-        pageAnimation: true,
-        url: ''
-      },
-      
-      _create: function() {
-        var self = this, $element = this.element, o = this.options;
-        
-        if ( !this.options.enhanced ) {
-          this._enhance();
-        }
-      },
-      
-      _enhance: function() {
-        var $element = this.element, o = this.options;
-
-        if ( o.role ) {
-          $element.attr( 'data-role', o.role );
-        }
-        
-        $element.addClass( 'ob-partial-view ob-partial-view-theme-' + this.options.theme );
-        $element.children().wrapAll('<div class="partial-view-container ob-partial-view-container-theme-' + this.options.theme + '"></div>');
-      },
-        
-      _setOptions: function( o ) {
-        if ( o.theme !== undefined ) {
-          this.element.removeClass( 'ob-partial-view-theme-' + this.options.theme ).addClass( 'ob-partial-view-theme-' + o.theme );
-        }
-      },
-      
-      keepNativeSelector: function() {
-        return $.trim( $.outback.keepNative );
-      },
-      
-      load: function( url, data ) {
-          var $element = this.element;
-          if ( url.length > 0 ) {
-            return $.outback.ajax({
-              url : url,
-              data : data
-            }).done( $.proxy( function(response) {
-              $element.children().remove();
-              
-              $element.append( response );
-              
-              // 내부에 popup이 있으면 body의 children으로 옮긴다.
-              var $popup = $element.find('[data-role=popup], .ob-popup, .popup');
-              $popup.filter(function() {
-                  return !$('body').children('#' + this.id).length;
-              });              
-              
-              $('body').prepend($popup);
-              
-              $element.enhanceWithin();
-              this._trigger( 'loaded', null, [ url ] );
-            }, this));
-          }
-          
-          var dfd = new $.Deferred();
-          dfd.reject();
-          
-          return dfd.promise();
-        }
-      // init, resume, stop ..
-    });
-  })(jQuery, this);
-  
   /**
    * outback entry point
    */
   (function( $, window, undefined ) {
-    var	$html = $( 'html' ),
+    var	$html = $( "html" ),
       $window = $.outback.window;
 
     //remove initial build class (only present on first pageshow)
     function hideRenderingClass() {
-      $html.removeClass( 'ob-rendering' );
+      $html.removeClass( "ui-mobile-rendering" );
     }
 
     // trigger mobileinit event - useful hook for configuring $.outback settings before they're used
-    $( window.document ).trigger( 'mobileinit' );
+    $( window.document ).trigger( "mobileinit" );
 
     // Add mobile, initial load "rendering" classes to docEl
-    $html.addClass( 'ob-rendering' );
+    $html.addClass( "ui-mobile ui-mobile-rendering" );
 
     // This is a fallback. If anything goes wrong (JS errors, etc), or events don't fire,
     // this ensures the rendering class is removed after 5 seconds, so content is visible and accessible
@@ -3427,17 +3322,14 @@
     //
     var sendDataCount = 0;
 
+    // base for xwalk
     $.extend( $.outback, {
       initializePage: function() {
-        if($('[data-role="page"]').length > 0 && $('[data-role="page"]').page) {
-          $('[data-role="page"]').page();
-          
-          if(!$('[data-role="page"]').data('outback-page').option('renderingOninitpage')) {
+        if($("[data-role='page']").page) {
+          $("[data-role='page']").page();
+          if(!$("[data-role='page']").data("outback-page").option("renderingOninitpage")) {
             hideRenderingClass();
           }
-        }
-        else {
-          hideRenderingClass();
         }
       },
       historyBack: function(obj) {
@@ -3448,46 +3340,35 @@
           history.back();
         }
       },
-      ajax: function(options) {
-        var hideLoading = options.hideLoading;
+      post: function(obj) {
+        var hideLoading = obj.hideLoading;
         if(!hideLoading) {
           $.outback.loading('show');
         }
 
-        // default는 post
-        options.method = options.method || 'post';
-
-        return $.ajax(options)
-	      .fail(function() {
-	        $.outback.loading('hide', true);
-	      })
-	      .always(function() {
-	        if(!hideLoading) {
-	          $.outback.loading('hide');
-	        }
-	      });
-      },
-      formSubmit: function(obj) {
-    	  $('body').append('<form id="formForOutback" method="post" action="' + obj.url + '"></form>');
-    	  
-    	  var strHtml = '';
-    	  for(var name in obj.data) {
-    		  var value = obj.data[name];
-    		  strHtml += '<input type="hidden" name="' + name + '" value="' + value + '" />';
-    	  }
-		  $('#formForOutback').html(strHtml);
-		  $('#formForOutback').submit();    	  
+        return $.ajax({
+          method : 'post',
+          url : obj.url,
+          data : obj.data
+        })
+        .fail(function() {
+          $.outback.loading('hide', true);
+        })
+        .always(function() {
+          if(!hideLoading) {
+            $.outback.loading('hide');
+          }
+        });
       },
       log: function(tag, message, level) {
         console.log(message);
       },
       getCurrentPageInstance: function() {
-        return $('[data-role="page"]').page('instance');
+        return $("[data-role=page]").page("instance");
       }
     });
 
     $(function() {
-      $(document).trigger('outbackinit');
       $.outback.initializePage();
     });
   }( jQuery, this ));
@@ -3497,143 +3378,78 @@
    */
   (function( $, undefined ) {
 
-    // TODO: alert 같은 popup이 중첩되어야 할 경우 현재 지원 안됨.
-    // popup의 tag를 template으로 생성하여 항상 instance를 생성하도록 기능 추가해야함. 
     $.outback.popupOpen = function(id, options) {
-    	var $popup;
-    	options = options || {};
-    	if(id.constructor.name == 'Object') {
-    		options = id;
-    		id = null;
-    	}
-      
-  	  	if ( options.url ) {
-		    $.outback.ajax({
-		    	url: options.url,
-		    	data: options.data,
-		    	method: 'post'
-		    }).done(function(text) {
-		        if(typeof text != "string") {
-                    // 문자열이 아닐경우 에러임.
-		            console.error(text);
-		            return;
-		        }
-		        
-		        var role;
-		    	if(id) {
-					$popup = $(id);
-					$popup.find('.ob-popup-content').html(text);
-
-					role = $popup.data('role');
-					
-					if (!$popup[role]('instance')) {
-						$popup[role](options).enhanceWithin();
-					}
-					else {
-						$popup[role]('option', options);
-						$popup.find('.ob-popup-content').enhanceWithin();
-					}
-					$popup[role]('open');
-		    	}
-		    	else {
-		    		$('body').append(text);
-		    		$popup = $('[data-role^=popup]').last();
-
-		    		role = $popup.data('role');
-		    		
-		    		$popup[role]($.extend({alwaysDestroy: true}, options)).enhanceWithin();
-		    		$popup[role]('open');		    	  
-		    	}
-		    });
-  	  	}
-  	  	else if(id) {
-  	  		$popup = $(id);
-  	  		
-  	  		// open되어 있는 popup이 새로 띄울 popup과 같은 게 있으면 close한다.  
-  	  		for(var n=0; n < popupArray.length; n++) {
-  	  		    if(popupArray[n].element.is($popup)) {
-  	  		        $.outback.popupClose( $popup );
-  	  		    }
-  	  		}
-  	  		
-  	  	    if($popup.length > 1) {
-  	  	        $popup.each(function(i) {
-  	  	            if(i > 0) {
-  	  	                $(this).remove();
-  	  	            }
-  	  	        });
-  	  	        $popup = $(id);
-  	  	    }
-  	  		if(options.html) {
-  	  			$popup.find('.ob-popup-content').html(options.html);
-  	  		}
-
-            var role = $popup.data('role');
-      	  	if (!$popup[role]('instance')) {
-                $popup[role](options).enhanceWithin();
-            }
-            else {
-                $popup[role](options);
-                if(options.html) {
-                    $popup.find('.ob-popup-content').enhanceWithin();
-                }
-            }
-            $popup[role]('open');
-  	  	}
-	};
-
-    $.outback.popupClose = function(id, retVal) {
       var $popup = $(id);
-      if ($popup && ($popup.is('[data-role^=popup]'))) {
-        var role = $popup.data('role');
-        $popup[role]('close', retVal);
+
+      if ($popup && ($popup.attr('data-role') === 'popup')) {
+        if (!$popup.data('outback-popup')) {
+          $popup.popup(options).trigger('create');
+        }
+        else {
+          $popup.popup("option", options);
+        }
+        /* url이 있을 경우 외부에서 html을 popup content에 삽입한다. */
+        if(options.url) {
+          $.get({
+            url : options.url,
+            data : options.data
+          }).done(function(text) {
+            $popup.find('.ui-popup-content').html(text);
+          });
+        }
+        else {
+          $popup.popup('open');
+        }
+      }
+    };
+
+    $.outback.popupClose = function(id) {
+      var $popup = $(id);
+      if ($popup && ($popup.attr('data-role') === 'popup')) {
+        $popup.popup('close');
       }
     };
 
     $(function() {
-      $('.on-popup-btn-open').on('click', function(e) {
-        var popupId = $(e.target).closest('.ob-popup-btn-open').data('popupId');
-        $.outback.popupOpen('#' + popupId)
+      $(".ui-popup-btn-open").on("vclick", function(e) {
+        var popupId = $(e.target).closest(".ui-popup-btn-open").data("popupId");
+        $.outback.popupOpen("#" + popupId)
 
         return false;
       });
     });
 
     var popupArray = [];
+    var popupStatus = 'closed';
     var zIndexDefaultBackground = 10000;
     var zIndexDefaultPopup = zIndexDefaultBackground + 1;
 
-    $.widget('outback.popup', {
+    $.widget("outback.popup", {
       options: {
         modal: true,
         backgroundOpacity: 0.8,
-        animation: false,
+        animation: true,
         beforeopened: null,
         opened: null,
-        closing: null,
         closed: null,
         inAnimation: 'fadeIn',
         outAnimation: 'fadeOut fast',
         vcenter: true,
         hcenter: true,
         url: '',
-        data: '',
-        alwaysDestroy: false,
-        focusDisable: false,
-        zIndexOfBackground: null
+        data: ''
       },
 
       _create: function() {
         var $el = this.element, self = this, o = this.options;
-        
-        $el.addClass('ob-popup');
+        $el.addClass('ui-popup');
 
         // Android 4.3이하는 팝업 에니메이션이 안되도록 수정.
         if(bowser.android && parseFloat(bowser.osversion) <= 4.3) {
           o.animation = false;
         }
 
-        $(document).on('click', '.ob-popup-bg', function(e) {
+        $(document).on('vclick', '.ui-popup-bg', function(e) {
           if (popupArray.length > 0) {
             var topPopup = popupArray[popupArray.length - 1];
             if (!topPopup.options.modal) {
@@ -3644,7 +3460,7 @@
         });
 
         this._on({
-          'click .ob-popup-btn-close': function(e) {
+          'vclick .ui-popup-btn-close, .btnCancel': function(e) {
             self._delay(function() {
               self.close();
             },100);
@@ -3652,136 +3468,91 @@
             e.stopImmediatePropagation();
             return false;
           },
-          'click button:not(.ob-popup-btn-close)': function(e) {
-        	  var retVal = $(e.currentTarget).data('result');
-        	  if(retVal) {
-	        	  self._delay(function() {
-	        		  self.close(retVal);
-	              },100);
-	        	  
-	        	  e.stopImmediatePropagation();
-	              return false;	        	  
-        	  }
+          'vclick .btnOK': function(e) {
+            self._delay(function() {
+              self.close({result : "OK" });
+            },100);
+
+            e.stopImmediatePropagation();
+            return false;
           },
-          'change .ob-popup-radio-result': function(e) {
-        	  var retVal = $(e.currentTarget).find('input[type=radio]:checked').val();
-        	  if(retVal) {
-	        	  self._delay(function() {
-	        		  self.close(retVal);
-	              },100);
-	        	  
-	        	  e.stopImmediatePropagation();
-	              return false;	        	  
-        	  }
+          'vclick .btnResult': function(e) {
+            var result = $(e.target).data('result');
+            self._delay(function() {
+              self.close({
+                result : result
+              });
+            },100);
+
+            e.stopImmediatePropagation();
+            return false;
+          },
+          'vclick': function(e) {
+            // 팝업 상위로 버블링되는 event를 막기위함. 단말에서 깜빡임의 원인이 됨.
+            e.stopPropagation();
           }
         });
-        
-        // image 로드되면 resize해야함. load event는 bubbling이 안됨.
-        this.element[0].addEventListener('load', function(e) {
-            // load된 후에 popup이 보이게 한다.
-            self.asyncCompleted();
-        }, true);
-      },
-      
-      asyncCompleted: function() {
-        var $el = this.element;
-        var left = $el.data('left');        // open시에 저장
-        $el.css('left', left);
-        this.resize();
-      },
-      
-      resize: function() {
-        var $el = this.element, o = this.options;
-        if(o.vcenter) {
-          if(o.vcenter) {
-            var vAlign = ($.outback.getScreenHeight() - $el.height()) / 2;
-            $el.css({
-              marginTop: 0,
-              top: vAlign
-            });            
-          }
-        }
+
+        popupStatus = 'closed';
       },
 
       open: function() {
         var $el = this.element, self = this, o = this.options;
 
-        if ( popupArray.length ) {
-            for ( var i; i < popupArray.length; i++ ) {
-                if ( popupArray[i].element.is( this.element ) ) {
-                    return;
-                }
-            }
+        if(popupStatus === 'opened') {
+          return false;
         }
-        
-        this._trigger( 'beforeopened' );
+
+        this._trigger( "beforeopened" );
+
+        if(o.animation) {
+          $el.addClass('ui-popup-active animated '+ o.inAnimation);
+        }
+        else {
+          $el.addClass('ui-popup-active');
+        }
 
         // 수직 가운데 정렬
         if(o.vcenter) {
-          var vAlign = ($.outback.getScreenHeight() - $el.height()) / 2;
-          $el.css({
-            marginTop: 0,
-            top: vAlign
-          });            
+          var vAlign = $el.height() / 2;
+          $el.css('margin-top', -vAlign);
         }
 
         // 수평 가운데 정렬
         if(o.hcenter) {
-          var hAlign = ($el.parent().outerWidth(true) - $el.outerWidth(true)) / 2;
+          var hAlign = ($el.parent().width() - $el.width()) / 2;
           $el.css('left', hAlign);
         }
-        
-        if($el.hasClass('ob-popup-async') && $el.find('img').length > 0 || this.isAsyncHtml) {
-          var left = $el.css('left');
-          $el.data('left', left);
-          $el.css('left', '-10000px');
-        }
-        
-        if(o.animation) {
-          $el.addClass('ob-popup-active animated '+ o.inAnimation);
-        }
-        else {
-          $el.addClass('ob-popup-active');
-        }
-        
+
         var $background;
         if (popupArray.length === 0) {
-          $background = $('<div id="outbackPopupBg" class="ob-popup-bg"/>');
-          $background.css('z-index', o.zIndexOfBackground || zIndexDefaultBackground);
-          $background.appendTo( $('body') );
+          $background = $('<div id="outbackPopupBg" class="ui-popup-bg"/>');
+          $background.css('z-index', zIndexDefaultBackground);
+          $background.appendTo($("body"));
           $background.css('opacity', o.backgroundOpacity);
-          $('#outbackPopupBg').on('touchmove', function(e) { return false; }); // 팝업 뒤가 scroll되지 않도록 막는다.
         } else {
           $background = $('#outbackPopupBg');
           $background.css({
             opacity: o.backgroundOpacity,
-            zIndex: o.zIndexOfBackground || (zIndexDefaultBackground + (2 * popupArray.length))
+            zIndex: zIndexDefaultBackground + (2 * popupArray.length)
           });
         }
 
-        if(o.zIndexOfBackground) {
-            $el.css('z-index', o.zIndexOfBackground + 1);   
-        } else {
-            $el.css('z-index', zIndexDefaultPopup + (2 * popupArray.length));    
-        }        
+        $el.css('z-index', zIndexDefaultPopup + (2 * popupArray.length));
 
         popupArray.push( this );
 
-        this._trigger( 'opened' );
+        this._trigger( "opened" );
+        popupStatus = 'opened';
 
         // popup으로 focus이동
         this.oldFocusEl = document.activeElement;
-        
-        // popup 뒤가 스크롤되지 않도록 막음.
-        $('body').css('overflow', 'hidden');
-        $el.scrollTop(0);
-        if ( !o.focusDisable ) {
-            $el.focus(300);
-        }
+        $el.focus(300);
       },
 
       close: function(retVal) {
         var $el = this.element, self = this, o = this.options;
+
         var $background = $('#outbackPopupBg');
 
         var _close = function() {
@@ -3793,42 +3564,30 @@
           } else {
             $background.css({
               opacity: popupArray.valueOf()[ popupArray.length -1 ].options.backgroundOpacity,
-              zIndex: popupArray.valueOf()[ popupArray.length -1 ].options.zIndexOfBackground || (zIndexDefaultBackground + (2 * (popupArray.length - 1)))
+              zIndex: zIndexDefaultBackground + (2 * (popupArray.length - 1))
             });
           }
-          
-          $('body').css('overflow', '');
 
-          self._trigger( 'closed', null, [retVal] );
+          self._trigger( "closed", null, retVal );
+          popupStatus = 'closed';
 
-          if ( !o.focusDisable ) {
-        	  $( self.oldFocusEl ).focus( 300 );
-          }
-          if ( o.alwaysDestroy ) {
-        	  $el.remove();
-          }
+          $(self.oldFocusEl).focus(300);
         };
 
-        // 호출후 close안되게 하면
-        self._trigger( 'closing', null, [retVal]);
-        if($el.data('cancelClose') === true) {
-          return;
-        }
-        
         if (o.animation) {
           $el.removeClass(o.inAnimation).addClass(o.outAnimation);
           $el.animationComplete(function() {
-            // animation 이 모두 끝나면..
-            $el.removeClass('ob-popup-active animated ' + o.outAnimation);
+            // animation이 모두 끝나면..
+            $el.removeClass('ui-popup-active animated ' + o.outAnimation);
             _close();
           });
         }
         else {
-          $el.removeClass('ob-popup-active');
+          $el.removeClass('ui-popup-active');
           _close();
         }
       }
     });
   })( jQuery );
-  
+
 }));
